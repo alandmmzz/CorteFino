@@ -34,7 +34,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
     if (!selectedDate) { setBookedTimes([]); return }
     setIsLoadingTimes(true)
     setSelectedTime(null)
-    if (!selectedCategory || !isOnlineCategory(selectedCategory)) {
+    if (!selectedCategory) {
       setBookedTimes([])
       setIsLoadingTimes(false)
       return
