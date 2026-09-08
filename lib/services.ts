@@ -1,122 +1,31 @@
-export type Treatment = {
-  id: string
-  name: string
-  price: number | null
-  promoPrice?: number | null
-  note?: string
-}
+export type Treatment = { id: string; name: string; price: number | null; promoPrice?: number | null; note?: string }
+export type ServiceCategory = { name: string; description: string; treatments: readonly Treatment[] }
 
-export type ServiceCategory = {
-  name: string
-  description: string
-  treatments: readonly Treatment[]
-}
+export const SERVICE_CATEGORIES = [{
+  name: "Barbería",
+  description: "Cortes precisos, barba y estilos a tu medida",
+  treatments: [
+    { id: "corte", name: "Corte", price: 350 },
+    { id: "corte-barba", name: "Corte y barba", price: 400 },
+    { id: "solo-maquina", name: "Solo máquina", price: 250 },
+    { id: "corte-mechas", name: "Corte y mechas", price: 1400 },
+    { id: "corte-platinado", name: "Corte y platinado", price: 2000 },
+  ],
+}] as const satisfies readonly ServiceCategory[]
 
-export const SERVICE_CATEGORIES = [
-  {
-    name: "Nails",
-    description: "Manos cuidadas y diseños duraderos",
-    treatments: [
-      { id: "esmal­tado-semipermanente", name: "Esmaltado semipermanente", price: 590 },
-      { id: "kapping-gel", name: "Kapping gel", price: 790 },
-      { id: "mantenimiento-kapping", name: "Mantenimiento kapping", price: 690 },
-      { id: "nivelacion-rubber", name: "Nivelación rubber", price: 690 },
-      { id: "softgel", name: "Softgel", price: 990 },
-      { id: "mantenimiento-softgel", name: "Mantenimiento softgel", price: 790 },
-      { id: "remocion-ajena", name: "Remoción de retiros ajenos", price: 200 },
-      { id: "remocion-luma", name: "Remoción de LUMA", price: 150 },
-    ],
-  },
-  {
-    name: "Cosmetología",
-    description: "Rituales para iluminar y renovar tu piel",
-    treatments: [
-      { id: "spa-facial", name: "Spa facial", price: 800 },
-      { id: "limpieza-profunda", name: "Limpieza profunda", price: 1290 },
-    ],
-  },
-  {
-    name: "Masajes",
-    description: "Pausas de bienestar para tu cuerpo",
-    treatments: [
-      { id: "descontracturante", name: "Descontracturante", price: 790, note: "Cuello, espalda y cabeza · 40 min" },
-      { id: "relajante", name: "Relajante", price: 890, note: "Espalda, cuello, brazos y piernas · 50 min" },
-      { id: "piedras-calientes", name: "Piedras calientes (gemoterapia)", price: 990, note: "Espalda, piernas, brazos y pies · 60 min" },
-    ],
-  },
-  {
-    name: "Pedicuría",
-    description: "Estética e hidratación para tus pies",
-    treatments: [
-      { id: "estetica-pies", name: "Estética de pies", price: 590, note: "Incluye hidratación, eliminación de callos y esmaltado semipermanente" },
-    ],
-  },
-  {
-    name: "Depilación",
-    description: "Sistema español · Consultar promociones",
-    treatments: [{ id: "depilacion-consulta", name: "Depilación · consultar precio", price: null }],
-  },
-  {
-    name: "Promos",
-    description: "Combinaciones especiales para disfrutar más.",
-    treatments: [
-      { id: "promo-soft-gel-higiene", name: "Soft gel + higiene facial", price: 1590 },
-      { id: "promo-kapping-estetica", name: "Kapping gel + estética de pie", price: 1190 },
-      { id: "promo-semi-estetica", name: "Esmaltado semi + estética de pie", price: 890 },
-    ],
-  },
-] as const satisfies readonly ServiceCategory[]
-
-export const SERVICES = SERVICE_CATEGORIES.map((category) => ({
-  name: category.name,
-  price: category.treatments.reduce((total, treatment) => total + (treatment.price ?? 0), 0),
-}))
-
+export const SERVICES = SERVICE_CATEGORIES.map((category) => ({ name: category.name, price: category.treatments.reduce((total, treatment) => total + (treatment.price ?? 0), 0) }))
 export const SERVICE_NAMES = SERVICE_CATEGORIES.map((category) => category.name)
 export const DEPOSIT_OPTIONS = [30, 50, 80, 100] as const
-
-// Interruptor de la seña, controlado por variable de entorno en Vercel:
-// NEXT_PUBLIC_DEPOSIT_ENABLED = "false" -> se salta la seña (botón dice "CONTINUAR")
-// NEXT_PUBLIC_DEPOSIT_ENABLED = "true" (o si no existe) -> pide la seña como siempre
 export const DEPOSIT_ENABLED = process.env.NEXT_PUBLIC_DEPOSIT_ENABLED !== "false"
 
 export function getServicePrice(service: string): number {
-  try {
-    const selected = JSON.parse(service) as { category?: string; treatmentIds?: string[] }
-    const category = SERVICE_CATEGORIES.find((item) => item.name === selected.category)
-    return category?.treatments
-      .filter((treatment) => selected.treatmentIds?.includes(treatment.id))
-      .reduce((total, treatment) => total + (treatment.price ?? 0), 0) ?? 0
-  } catch {
-    return SERVICES.find((item) => item.name === service)?.price ?? 0
-  }
+  try { const selected = JSON.parse(service) as { category?: string; treatmentIds?: string[] }; const category = SERVICE_CATEGORIES.find((item) => item.name === selected.category); return category?.treatments.filter((treatment) => selected.treatmentIds?.includes(treatment.id)).reduce((total, treatment) => total + (treatment.price ?? 0), 0) ?? 0 } catch { return 0 }
 }
-
-export function formatServiceLabel(service: string): string {
-  try {
-    const selected = JSON.parse(service) as { category?: string; treatmentIds?: string[] }
-    const category = SERVICE_CATEGORIES.find((item) => item.name === selected.category)
-    const names = category?.treatments
-      .filter((treatment) => selected.treatmentIds?.includes(treatment.id))
-      .map((treatment) => treatment.name)
-    return names?.length ? `${selected.category}: ${names.join(", ")}` : service
-  } catch {
-    return service
-  }
-}
-
-export function formatUYU(amount: number): string {
-  return new Intl.NumberFormat("es-UY", { style: "currency", currency: "UYU", maximumFractionDigits: 0 }).format(amount)
-}
-
-export const BANK_ACCOUNT = {
-  bank: "Banco Itaú",
-  accountHolder: "LUMA Centro Estético",
-  accountType: "Caja de ahorro en pesos",
-  accountNumber: "0001234567890",
-  documentId: "RUT 21XXXXXXXXXX",
-  alias: "luma.centroestetico",
-  whatsapp: "099 123 456",
-}
-
+export function formatServiceLabel(service: string): string { try { const selected = JSON.parse(service) as { category?: string; treatmentIds?: string[] }; const category = SERVICE_CATEGORIES.find((item) => item.name === selected.category); const names = category?.treatments.filter((treatment) => selected.treatmentIds?.includes(treatment.id)).map((treatment) => treatment.name); return names?.length ? `${selected.category}: ${names.join(", ")}` : service } catch { return service } }
+export function formatUYU(amount: number): string { return new Intl.NumberFormat("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 }).format(amount) }
+export const BANK_ACCOUNT = { bank: "", accountHolder: "Corte Fino", accountType: "", accountNumber: "", documentId: "", alias: "", whatsapp: "" }
 export const MERCADO_PAGO_PUBLIC_TOKEN = ""
+
+export const BARBERSHOP_HOURS = { opening: "09:00", closing: "20:00", durationMinutes: 30 }
+export const BARBERSHOP_SCHEDULE = Array.from({ length: 22 }, (_, index) => { const minutes = 9 * 60 + index * 30; return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}` })
+

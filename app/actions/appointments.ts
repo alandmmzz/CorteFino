@@ -41,7 +41,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   const catalog = await getAllServiceCatalog()
   const category = catalog.find((item) => item.name === selection.category)
   if (!isOnlineCategory(selection.category)) {
-    return { ok: false, error: "Esta categoría se coordina por WhatsApp." }
+    return { ok: false, error: "Seleccioná Barbería." }
   }
   const validIds = new Set(category?.treatments.map((treatment) => String(treatment.id)) ?? [])
   if (!category || !Array.isArray(selection.treatmentIds) || selection.treatmentIds.length === 0 || selection.treatmentIds.some((id) => !validIds.has(String(id)))) {
@@ -71,7 +71,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     )
   const booked = existingAtTime.map((item) => {
     const bookedCategory = getAppointmentCategory(item.service)
-    return { category: bookedCategory, time: item.appointmentTime, durationMinutes: catalog.find((item) => item.name === bookedCategory)?.durationMinutes ?? 90 }
+    return { category: bookedCategory, time: item.appointmentTime, durationMinutes: 30 }
   })
   if (!isTimeAvailable(selection.category, appointmentTime, booked, category.durationMinutes)) {
     return { ok: false, error: "Ese horario se superpone con otro turno o supera la capacidad disponible." }
@@ -79,7 +79,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
 
   const price = catalogPrice(service, catalog)
   if (price <= 0) {
-    return { ok: false, error: "Para Depilación, consultá el precio antes de reservar." }
+    return { ok: false, error: "El tratamiento seleccionado no tiene un precio válido." }
   }
 
   const [row] = await db
@@ -121,7 +121,7 @@ export async function getAvailableSchedule(category: string) {
 export async function getServiceSchedules() {
   const rows = await db.select().from(serviceSchedules).orderBy(asc(serviceSchedules.serviceCategory), asc(serviceSchedules.startTime))
   if (rows.length) return rows
-  return Object.entries({ Nails: ["09:00", "13:00", "16:00", "19:00"], "Pedicuría": ["09:00", "13:00", "16:00", "19:00"], "Cosmetología": ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00"], Promos: ["09:00", "11:30", "14:00", "16:30"] }).flatMap(([serviceCategory, times]) => times.map((startTime) => ({ id: 0, serviceCategory, startTime, endTime: startTime })))
+  return getScheduleForCategory("Barbería").map((startTime) => ({ id: 0, serviceCategory: "Barbería", startTime, endTime: startTime }))
 }
 
 export async function updateServiceSchedules(serviceCategory: string, times: string[]) {

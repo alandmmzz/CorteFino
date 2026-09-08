@@ -3,13 +3,13 @@
 import { createAppointment, getAvailableSchedule, getBookedTimes } from "@/app/actions/appointments"
 import { DayPicker } from "@/components/day-picker"
 import { DEPOSIT_ENABLED, SERVICE_CATEGORIES, formatUYU } from "@/lib/services"
-import { getScheduleForCategory, isOnlineCategory, whatsappUrl } from "@/lib/schedule"
-import { Check, ChevronDown, Footprints, Hand, HeartPulse, Sparkles, Flower2, MessageCircle, Info } from "lucide-react"
+import { getScheduleForCategory } from "@/lib/schedule"
+import { Check, ChevronDown, Scissors, Info } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
 
 const inputClass = "w-full rounded-md border border-input bg-card px-4 py-3 text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
-const icons = { Nails: Hand, "Cosmetología": Sparkles, Masajes: HeartPulse, Pedicuría: Footprints, "Depilación": Flower2, Promos: Sparkles }
+const icons = { "Barbería": Scissors }
 
 function formatSelected(key: string) {
   return new Date(`${key}T00:00:00`).toLocaleDateString("es-UY", { weekday: "long", day: "numeric", month: "long" })
@@ -124,7 +124,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
         <input type="hidden" name="service" value={selectedCategory ?? ""} />
         {servicePrice > 0 && <p className="mt-3 text-sm text-muted-foreground">Total estimado: <span className="text-foreground">{formatUYU(servicePrice)}</span></p>}
       </fieldset>
-      {selectedCategory && !isOnlineCategory(selectedCategory) ? (
+      {false ? (
         <a href={whatsappUrl(`Hola, quisiera consultar horarios para ${selectedCategory}.`)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 rounded-full bg-whatsapp px-6 py-3.5 text-sm tracking-wide text-whatsapp-foreground transition-opacity hover:opacity-90">
           <MessageCircle className="h-5 w-5" aria-hidden="true" /> CONSULTAR POR HORARIOS A WHATSAPP
         </a>

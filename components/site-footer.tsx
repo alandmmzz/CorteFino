@@ -1,8 +1,7 @@
-import Image from "next/image"
 import { MessageCircle } from "lucide-react"
 import { whatsappUrl } from "@/lib/schedule"
 
-const INSTAGRAM_URL = "https://instagram.com/luma_centroestetico"
+const INSTAGRAM_URL = "https://instagram.com/cortefino"
 
 // lucide-react quitó los íconos de marcas (Instagram, etc.) en versiones recientes,
 // así que usamos el mismo trazado que usan sus íconos como SVG inline.
@@ -30,10 +29,10 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-secondary/40 py-14">
       <div className="mx-auto max-w-6xl px-6 text-center">
         <div className="flex flex-col items-center leading-none">
-          <Image src="/luma-logo.png" alt="LUMA Centro Estético" width={180} height={180} className="h-auto w-36" />
+          <span className="font-serif text-3xl tracking-[0.22em] text-foreground">CORTE FINO</span>
         </div>
         <p className="mx-auto mt-6 max-w-md text-sm italic leading-relaxed text-muted-foreground">
-          Iluminamos tu belleza, potenciamos tu esencia.
+          Tu estilo, bien hecho.
         </p>
         <p className="mt-6 text-xs tracking-wide text-muted-foreground">
           San Martín 2825 · Reducto · Montevideo, Uruguay
@@ -59,7 +58,7 @@ export function SiteFooter() {
           </a>
         </div>
         <p className="mt-3 text-xs tracking-wide text-muted-foreground">
-          @luma_centroestetico
+          @cortefino
         </p>
       </div>
     </footer>

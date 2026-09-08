@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
@@ -26,12 +25,12 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="block shrink-0" aria-label="LUMA Centro Estético, inicio">
-          <Image src="/luma-logo.png" alt="LUMA Centro Estético" width={150} height={150} className="h-auto w-28 sm:w-36" priority />
+        <Link href="/" className="block shrink-0" aria-label="Corte Fino, inicio">
+          <span className="font-serif text-2xl tracking-[0.22em] text-foreground sm:text-3xl">CORTE FINO</span>
         </Link>
         <nav className="hidden items-center gap-8 text-sm tracking-wide text-foreground md:flex">
           <Link href="/#nosotras" className="transition-colors hover:text-primary">
-            Nosotras
+            La barbería
           </Link>
           <Link href="/#servicios" className="transition-colors hover:text-primary">
             Servicios

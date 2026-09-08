@@ -8,13 +8,10 @@ export function About() {
           <Heart className="h-5 w-5" strokeWidth={1.2} aria-hidden="true" />
         </div>
         <p className="text-pretty font-serif text-3xl leading-snug text-foreground md:text-4xl">
-          Un espacio pensado para vos, donde la belleza y el bienestar se
-          encuentran.
+          Un corte cambia cómo te ves. Un buen corte cambia cómo te sentís.
         </p>
         <p className="mx-auto mt-6 max-w-xl leading-relaxed text-muted-foreground">
-          En LUMA potenciamos tu esencia con tratamientos personalizados,
-          atención cálida y productos de primera calidad. Gracias por
-          acompañarnos desde el comienzo: lo mejor está por venir.
+          En Corte Fino combinamos técnica, atención y productos de calidad para que cada visita tenga el resultado que buscás. Vení a encontrar tu próximo estilo.
         </p>
         <p className="mt-8 text-xs uppercase tracking-[0.3em] text-primary">
           San Martín 2825 · Reducto · Montevideo
