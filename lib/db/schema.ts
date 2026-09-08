@@ -55,6 +55,7 @@ export const staff = pgTable("staff", {
   name: text("name").notNull(),
   email: text("email"),
   photoUrl: text("photo_url"),
+  instagram: text("instagram"),
   adminAccess: boolean("admin_access").notNull().default(false),
   active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),

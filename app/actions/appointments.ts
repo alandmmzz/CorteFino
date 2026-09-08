@@ -141,9 +141,9 @@ export async function getStaff() {
   return db.select().from(staff).where(eq(staff.active, true)).orderBy(asc(staff.name))
 }
 
-export async function createStaff(name: string, email?: string, adminAccess = false, photoUrl?: string) {
+export async function createStaff(name: string, email?: string, adminAccess = false, photoUrl?: string, instagram?: string) {
   if (!name.trim()) return { ok: false, error: "Ingresá un nombre." }
-  await db.insert(staff).values({ name: name.trim(), email: email?.trim() || null, adminAccess, photoUrl: photoUrl?.trim() || null })
+  await db.insert(staff).values({ name: name.trim(), email: email?.trim() || null, adminAccess, photoUrl: photoUrl?.trim() || null, instagram: instagram?.trim() || null })
   revalidatePath("/admin")
   return { ok: true }
 }
