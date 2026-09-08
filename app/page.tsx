@@ -1,6 +1,8 @@
 import { About } from "@/components/about"
 import { Barbers } from "@/components/barbers"
 import { BookingSection } from "@/components/booking-section"
+import { Membership } from "@/components/membership"
+import { getMembership } from "@/app/actions/membership"
 import { Hero } from "@/components/hero"
 import { Services } from "@/components/services"
 import { SiteFooter } from "@/components/site-footer"
@@ -12,7 +14,7 @@ import { getStaff } from "@/app/actions/appointments"
 export const dynamic = "force-dynamic"
 
 export default async function HomePage() {
-  const [dbCatalog, staff] = await Promise.all([getServiceCatalog(), getStaff()])
+  const [dbCatalog, staff, membership] = await Promise.all([getServiceCatalog(), getStaff(), getMembership()])
   const catalog = dbCatalog.map((category) => ({
     name: category.name,
     description: category.description,
@@ -30,6 +32,8 @@ export default async function HomePage() {
       <Hero />
       <div className="barber-stripe h-3" aria-hidden="true" />
       <Barbers staff={staff} />
+      <div className="barber-stripe h-3" aria-hidden="true" />
+      <Membership membership={membership} />
       <div className="barber-stripe h-3" aria-hidden="true" />
       <About />
       <div className="barber-stripe h-3" aria-hidden="true" />

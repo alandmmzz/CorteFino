@@ -50,6 +50,17 @@ export const serviceTreatments = pgTable("service_treatments", {
   showOnSite: boolean("show_on_site").notNull().default(true),
 })
 
+export const membershipConfig = pgTable("membership_config", {
+  id: integer("id").primaryKey().default(1),
+  name: text("name").notNull().default("Corte + Fino"),
+  price: integer("price").notNull().default(0),
+  chemicalDiscount: integer("chemical_discount").notNull().default(20),
+  monthlyCuts: integer("monthly_cuts").notNull().default(4),
+  description: text("description").notNull().default("Una forma simple de cuidar tu estilo todo el mes."),
+  active: boolean("active").notNull().default(true),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+})
+
 export const staff = pgTable("staff", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),

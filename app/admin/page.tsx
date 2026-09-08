@@ -10,17 +10,20 @@ import Link from "next/link"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { AdminAccessForm } from "@/components/admin-access-form"
 import { getAdminEmails } from "@/lib/admin-auth"
+import { getMembership } from "@/app/actions/membership"
+import { AdminMembership } from "@/components/admin-membership"
 
 export const dynamic = "force-dynamic"
 
 export default async function AdminPage() {
   if (!(await isAdminAuthenticated())) return <AdminAccessForm />
 
-  const [appointments, serviceCatalog, staffList, scheduleList] = await Promise.all([
+  const [appointments, serviceCatalog, staffList, scheduleList, membership] = await Promise.all([
     getAppointments(),
     getAdminServiceCatalog(),
     getStaff(),
     getServiceSchedules(),
+    getMembership(),
   ])
 
   return (
@@ -49,6 +52,7 @@ export default async function AdminPage() {
           personal={<AdminStaff staff={staffList} adminEmails={getAdminEmails()} />}
           horarios={<AdminSchedules schedules={scheduleList} catalog={serviceCatalog} />}
           stories={<AdminStories catalog={serviceCatalog} />}
+          membresia={<AdminMembership membership={membership} />}
         />
       </div>
     </main>
