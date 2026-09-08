@@ -11,7 +11,7 @@ const services: PublicService[] = SERVICE_CATEGORIES.map((category) => ({
 
 export function Services({ catalog = services }: { catalog?: PublicService[] } = {}) {
   return (
-    <section id="servicios" className="bg-secondary/50 py-24">
+    <section id="servicios" className="barber-pattern bg-secondary/50 py-24">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mb-14 text-center">
           <p className="mb-3 text-xs uppercase tracking-[0.4em] text-primary">
