@@ -250,7 +250,7 @@ function emailLayout(options: { preheader: string; eyebrow: string; heading: str
                 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:18px auto 0 auto;">
                   <tr>
                     <td style="padding:0 12px;border-right:1px solid #dfd1bd;">
-                      <a href="https://instagram.com/luma_centroestetico" style="color:#8a6b43;font-family:Arial,sans-serif;font-size:11px;text-decoration:none;">Instagram</a>
+                      <a href="https://instagram.com/cortefinoestudio2026" style="color:#8a6b43;font-family:Arial,sans-serif;font-size:11px;text-decoration:none;">Instagram</a>
                     </td>
                     <td style="padding:0 12px;">
                       <a href="${WHATSAPP_EMAIL_URL}" style="color:#8a6b43;font-family:Arial,sans-serif;font-size:11px;text-decoration:none;">WhatsApp</a>

@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react"
 import { whatsappUrl } from "@/lib/schedule"
 
-const INSTAGRAM_URL = "https://instagram.com/cortefino"
+const INSTAGRAM_URL = "https://instagram.com/cortefinoestudio2026"
 
 // lucide-react quitó los íconos de marcas (Instagram, etc.) en versiones recientes,
 // así que usamos el mismo trazado que usan sus íconos como SVG inline.
@@ -58,7 +58,7 @@ export function SiteFooter() {
           </a>
         </div>
         <p className="mt-3 text-xs tracking-wide text-muted-foreground">
-          @cortefino
+          @cortefinoestudio2026
         </p>
       </div>
     </footer>
