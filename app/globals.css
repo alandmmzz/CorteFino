@@ -168,6 +168,22 @@
   }
 }
 
+.membership-premium::before {
+  background: linear-gradient(110deg, transparent 0%, oklch(0.62 0.2 20 / 0.22) 46%, transparent 70%);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+.membership-metal {
+  background: linear-gradient(180deg, oklch(1 0 0) 0%, oklch(0.75 0 0) 32%, oklch(1 0 0) 48%, oklch(0.52 0 0) 72%, oklch(1 0 0) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 1px 0 oklch(1 0 0 / 0.16));
+}
+
 .barber-stripe {
   background: repeating-linear-gradient(
     135deg,
