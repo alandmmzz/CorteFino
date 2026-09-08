@@ -27,8 +27,10 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   const service = String(formData.get("service") ?? "").trim()
   const appointmentDate = String(formData.get("appointmentDate") ?? "").trim()
   const appointmentTime = String(formData.get("appointmentTime") ?? "").trim()
+  const staffIdValue = String(formData.get("staffId") ?? "").trim()
+  const staffId = staffIdValue ? Number(staffIdValue) : null
 
-  if (!name || !phone || !service || !appointmentDate || !appointmentTime) {
+  if (!name || !phone || !service || !appointmentDate || !appointmentTime || !staffId || !Number.isInteger(staffId)) {
     return { ok: false, error: "Por favor completá todos los campos." }
   }
 
@@ -39,6 +41,8 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     return { ok: false, error: "Seleccioná un tratamiento válido." }
   }
   const catalog = await getAllServiceCatalog()
+  const [selectedStaff] = await db.select({ id: staff.id }).from(staff).where(and(eq(staff.id, staffId), eq(staff.active, true)))
+  if (!selectedStaff) return { ok: false, error: "Seleccioná un barbero válido." }
   const category = catalog.find((item) => item.name === selection.category)
   if (!isOnlineCategory(selection.category)) {
     return { ok: false, error: "Seleccioná Barbería." }
@@ -66,6 +70,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     .where(
       and(
         eq(appointments.appointmentDate, appointmentDate),
+        eq(appointments.staffId, staffId),
         ne(appointments.status, "cancelado"),
       ),
     )
@@ -91,6 +96,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
       service,
       appointmentDate,
       appointmentTime,
+      staffId,
       price,
     })
     .returning({ id: appointments.id })
@@ -484,7 +490,7 @@ export async function getWeeklyAvailability(category: string) {
   return Promise.all(days.map(async (day) => ({ ...day, times: await getBookedTimes(day.date, category) })))
 }
 
-export async function getBookedTimes(appointmentDate: string, category?: string) {
+export async function getBookedTimes(appointmentDate: string, category?: string, staffId?: number) {
   const catalog = await getAllServiceCatalog()
   const rows = await db
     .select({ appointmentTime: appointments.appointmentTime, service: appointments.service })
@@ -492,6 +498,7 @@ export async function getBookedTimes(appointmentDate: string, category?: string)
     .where(
       and(
         eq(appointments.appointmentDate, appointmentDate),
+        ...(staffId ? [eq(appointments.staffId, staffId)] : []),
         ne(appointments.status, "cancelado"),
       ),
     )

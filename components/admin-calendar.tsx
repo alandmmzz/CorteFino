@@ -60,9 +60,11 @@ function formatLong(key: string) {
 export function AdminCalendar({
   appointments,
   catalog,
+  staff,
 }: {
   appointments: Appointment[]
   catalog: ServiceCatalog
+  staff: { id: number; name: string }[]
 }) {
   const today = new Date()
   const [cursor, setCursor] = useState({
@@ -70,6 +72,7 @@ export function AdminCalendar({
     month: today.getMonth(),
   })
   const [showGantt, setShowGantt] = useState(false)
+  const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null)
   const [selected, setSelected] = useState<string | null>(
     toKey(today.getFullYear(), today.getMonth(), today.getDate()),
   )
@@ -78,7 +81,7 @@ export function AdminCalendar({
   const byDate = useMemo(() => {
     const map = new Map<string, Appointment[]>()
     for (const a of appointments) {
-      if (a.status === "cancelado") continue
+      if (a.status === "cancelado" || (selectedStaffId !== null && a.staffId !== selectedStaffId)) continue
       const list = map.get(a.appointmentDate) ?? []
       list.push(a)
       map.set(a.appointmentDate, list)
@@ -87,7 +90,7 @@ export function AdminCalendar({
       list.sort((x, y) => x.appointmentTime.localeCompare(y.appointmentTime))
     }
     return map
-  }, [appointments])
+  }, [appointments, selectedStaffId])
 
   const { year, month } = cursor
   // getDay(): 0=Sun..6=Sat -> shift so Monday is first column.
@@ -116,11 +119,12 @@ export function AdminCalendar({
   return (
     <div className="mb-10 grid min-w-0 max-w-full gap-6 overflow-hidden lg:grid-cols-[1.4fr_1fr]">
       <div className="min-w-0 max-w-full overflow-hidden rounded-xl border border-border bg-card/60 p-6">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="font-serif text-2xl text-foreground">
             {MONTHS[month]} {year}
           </h2>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <select aria-label="Filtrar calendario por barbero" value={selectedStaffId ?? ""} onChange={(event) => setSelectedStaffId(event.target.value ? Number(event.target.value) : null)} className="max-w-full rounded-full border border-border bg-background px-3 py-2 text-xs text-foreground"><option value="">Todos los barberos</option>{staff.map((person) => <option key={person.id} value={person.id}>{person.name}</option>)}</select>
             <button
               onClick={() => shiftMonth(-1)}
               aria-label="Mes anterior"
