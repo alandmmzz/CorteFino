@@ -26,8 +26,11 @@ export default async function HomePage() {
     <main>
       <SiteHeader />
       <Hero />
+      <div className="barber-stripe h-3" aria-hidden="true" />
       <About />
+      <div className="barber-stripe h-3" aria-hidden="true" />
       <Services catalog={catalog} />
+      <div className="barber-stripe h-3" aria-hidden="true" />
       <BookingSection />
       <SiteFooter />
       <WhatsAppFloat />

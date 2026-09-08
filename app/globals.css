@@ -168,9 +168,14 @@
   }
 }
 
-.barber-pattern {
-  background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-PP3KY0ExEHmYH4Nfx55glfTn3RPbNE.png');
-  background-position: right top;
-  background-repeat: repeat-y;
-  background-size: 170px auto;
+.barber-stripe {
+  background: repeating-linear-gradient(
+    135deg,
+    oklch(0.18 0 0) 0 18px,
+    oklch(1 0 0) 18px 36px,
+    oklch(0.48 0.12 250) 36px 54px,
+    oklch(1 0 0) 54px 72px,
+    oklch(0.62 0.2 20) 72px 90px,
+    oklch(1 0 0) 90px 108px
+  );
 }
