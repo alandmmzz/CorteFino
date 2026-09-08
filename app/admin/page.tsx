@@ -32,7 +32,7 @@ export default async function AdminPage() {
               Panel de administración
             </p>
             <h1 className="mt-2 font-serif text-4xl text-foreground">
-              Turnos de LUMA
+              Turnos de Corte Fino
             </h1>
           </div>
           <Link
