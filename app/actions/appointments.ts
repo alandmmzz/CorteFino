@@ -154,6 +154,15 @@ export async function createStaff(name: string, email?: string, adminAccess = fa
   return { ok: true }
 }
 
+export async function updateStaff(id: number, data: { name: string; email?: string; instagram?: string; photoUrl?: string }) {
+  if (!data.name.trim()) return { ok: false, error: "Ingresá un nombre." }
+  await db.update(staff).set({ name: data.name.trim(), email: data.email?.trim() || null, instagram: data.instagram?.trim() || null, photoUrl: data.photoUrl?.trim() || null }).where(eq(staff.id, id))
+  revalidatePath("/admin")
+  revalidatePath("/")
+  revalidatePath("/reservar")
+  return { ok: true }
+}
+
 export async function updateStaffAdminAccess(id: number, adminAccess: boolean) {
   const [person] = await db.select({ email: staff.email }).from(staff).where(eq(staff.id, id))
   if (!person?.email) return { ok: false, error: "La persona necesita un email para tener acceso admin." }
