@@ -65,11 +65,11 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
           <Link href="/reservar" className="w-fit rounded-full border border-primary px-5 py-2.5 text-xs font-medium tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground">VER TODOS</Link>
         </div>
         <div className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55"><Scissors aria-hidden="true" className="size-4 text-primary" /><span className="h-px w-10 bg-primary" /><span>Barbería</span></div>
-        <div ref={carouselRef} className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:overflow-visible xl:grid-cols-2">
+        <div ref={carouselRef} className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:overflow-x-auto">
           {treatments.map(({ service, treatment, index }) => {
             const TreatmentIcon = serviceIcons[index % serviceIcons.length]
             return (
-            <article key={treatment.id} className="group flex min-h-56 min-w-[calc(100vw-2.5rem)] snap-start flex-col overflow-hidden rounded-2xl border border-foreground/15 bg-foreground/[0.045] shadow-[0_16px_40px_oklch(0_0_0/0.2)] transition-colors hover:border-primary/60 sm:min-w-[22rem] md:min-w-0">
+            <article key={treatment.id} className="group flex min-h-56 min-w-[calc(100vw-2.5rem)] snap-start flex-col overflow-hidden rounded-2xl border border-foreground/15 bg-foreground/[0.045] shadow-[0_16px_40px_oklch(0_0_0/0.2)] transition-colors hover:border-primary/60 sm:min-w-[22rem] md:min-w-0 md:basis-1/3">
               <img src={getTreatmentImage(treatment)} alt={`Foto ilustrativa de ${treatment.name}`} className="h-28 w-full object-cover opacity-80 grayscale transition duration-500 group-hover:opacity-100 group-hover:grayscale-0" />
               <div className="flex flex-1 flex-col p-5 sm:p-6">
               <div className="flex items-start justify-between gap-4"><div className="flex items-start gap-3"><span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><TreatmentIcon aria-hidden="true" className="size-3.5" /></span><div><span className="font-mono text-[10px] text-primary/80">{String(index + 1).padStart(2, "0")}</span><h3 className="font-serif text-2xl text-foreground">{treatment.name}</h3></div></div><span className="inline-flex shrink-0 rounded-full border border-foreground/15 bg-foreground/[0.06] px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-foreground/65">30 min</span></div>
