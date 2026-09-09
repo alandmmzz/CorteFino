@@ -7,6 +7,7 @@ import { Services } from "@/components/services"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
+import { ScrollReveal } from "@/components/scroll-reveal"
 import { getServiceCatalog } from "@/lib/db/services"
 import { getStaff } from "@/app/actions/appointments"
 
@@ -30,13 +31,13 @@ export default async function HomePage() {
       <SiteHeader />
       <Hero />
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <div className="show-up show-up-1"><Barbers staff={staff} /></div>
+      <ScrollReveal delay={40}><Barbers staff={staff} /></ScrollReveal>
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <div className="show-up show-up-2"><Membership membership={membership} /></div>
+      <ScrollReveal delay={80}><Membership membership={membership} /></ScrollReveal>
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <div className="show-up show-up-3"><Services catalog={catalog} /></div>
+      <ScrollReveal delay={120}><Services catalog={catalog} /></ScrollReveal>
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <div className="show-up show-up-4"><BookingSection /></div>
+      <ScrollReveal delay={160}><BookingSection /></ScrollReveal>
       <SiteFooter />
       <WhatsAppFloat />
     </main>
