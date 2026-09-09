@@ -26,7 +26,7 @@ export default async function HomePage() {
     })),
   }))
   return (
-    <main>
+    <main className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <Hero />
       <div className="barber-stripe h-3" aria-hidden="true" />
