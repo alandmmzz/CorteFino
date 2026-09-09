@@ -26,18 +26,18 @@ function InstagramIcon({ className }: { className?: string }) {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-secondary/40 py-14">
-      <div className="mx-auto max-w-6xl px-6 text-center">
+    <footer className="border-t border-border bg-secondary/40 py-8 sm:py-10">
+      <div className="mx-auto max-w-6xl px-5 text-center sm:px-6">
         <div className="flex flex-col items-center leading-none">
           <span className="font-serif text-3xl tracking-[0.22em] text-foreground">CORTE FINO</span>
         </div>
-        <p className="mx-auto mt-6 max-w-md text-sm italic leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-md text-sm italic leading-relaxed text-muted-foreground">
           Tu estilo, bien hecho.
         </p>
-        <p className="mt-6 text-xs tracking-wide text-muted-foreground">
+        <p className="mt-3 text-xs tracking-wide text-muted-foreground">
           Santa Catalina · Montevideo, Uruguay
         </p>
-        <div className="mt-4 flex items-center justify-center gap-3">
+        <div className="mt-3 flex items-center justify-center gap-3">
           <a
             href={INSTAGRAM_URL}
             target="_blank"
@@ -57,7 +57,7 @@ export function SiteFooter() {
             <MessageCircle className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
           </a>
         </div>
-        <p className="mt-3 text-xs tracking-wide text-muted-foreground">
+          <p className="mt-2 text-xs tracking-wide text-muted-foreground">
           @cortefinoestudio2026
         </p>
       </div>
