@@ -14,10 +14,13 @@ export function Hero() {
           <h1 className="max-w-3xl font-serif text-5xl leading-[0.9] tracking-[-0.035em] text-balance sm:text-6xl xl:text-7xl">
             Tu estilo, <span className="text-foreground/80">tu sello.</span>
           </h1>
-          <h2 className="mt-5 max-w-2xl text-2xl font-semibold leading-[1.05] text-balance sm:text-3xl xl:text-4xl">
+          <h2 className="mt-7 max-w-2xl text-2xl font-semibold leading-[1.05] text-balance sm:text-3xl xl:text-4xl">
             Barbería de precisión en Santa Catalina.
           </h2>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <p className="mt-6 max-w-xl text-sm leading-6 text-foreground/70 sm:text-base">
+            Elegí tu servicio, tu barbero y tu horario. Una experiencia cuidada para que salgas sintiéndote tan bien como te ves.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
             <a href="/reservar" className="hero-button-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5">
               Reservá ya <ArrowRight aria-hidden="true" className="size-4" />
             </a>
@@ -25,7 +28,7 @@ export function Hero() {
               Ver barberos
             </a>
           </div>
-          <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-2 text-xs text-foreground/60" aria-label="Beneficios de Corte Fino">
+          <ul className="mt-8 flex flex-wrap gap-x-3 gap-y-2 text-xs text-foreground/60" aria-label="Beneficios de Corte Fino">
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Agenda online</li>
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Atención personalizada</li>
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Profesionales calificados</li>
