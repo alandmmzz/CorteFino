@@ -4,11 +4,11 @@ import Link from "next/link"
 type PublicService = { name: string; description: string; treatments: readonly { id: string; name: string; price: number | null; promoPrice?: number | null; note?: string }[] }
 
 const treatmentImages: Record<string, string> = {
-  corte: "/treatments/corte.png",
-  "corte-barba": "/treatments/corte-barba.png",
-  "solo-maquina": "/treatments/solo-maquina.png",
-  "corte-mechas": "/treatments/corte-mechas.png",
-  "corte-platinado": "/treatments/corte-platinado.png",
+  corte: "/treatments/corte.png?v=1",
+  "corte-barba": "/treatments/corte-barba.png?v=1",
+  "solo-maquina": "/treatments/solo-maquina.png?v=1",
+  "corte-mechas": "/treatments/corte-mechas.png?v=1",
+  "corte-platinado": "/treatments/corte-platinado.png?v=1",
 }
 
 const services: PublicService[] = SERVICE_CATEGORIES.map((category) => ({
