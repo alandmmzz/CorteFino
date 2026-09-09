@@ -24,7 +24,7 @@ export function Membership({ membership }: { membership: Membership }) {
         </div>
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-destructive">La membresía de la casa</p>
+            <p className="text-xs uppercase tracking-[0.35em] membership-gold-text">La membresía de la casa</p>
             <h2 className="membership-metal mt-4 max-w-xl font-serif text-6xl font-bold leading-[0.86] tracking-[-0.04em] text-balance sm:text-8xl">{membership.name}</h2>
             <p className="mt-6 max-w-md text-base leading-7 text-foreground/70">{membership.description}</p>
             <p className="mt-5 font-serif text-2xl font-semibold text-foreground">{membership.price ? `$${membership.price.toLocaleString("es-AR")}` : "A consultar"}<span className="ml-2 font-sans text-sm font-normal text-foreground/60">por mes</span></p>
@@ -33,13 +33,13 @@ export function Membership({ membership }: { membership: Membership }) {
             <p className="font-serif text-2xl font-semibold text-foreground">Incluye:</p>
             <div className="mt-6 grid gap-3">
               {benefits.map((benefit) => (
-                <div key={benefit} className="flex min-h-16 items-center gap-4 rounded-2xl border border-foreground/15 bg-background px-4 py-4 shadow-sm sm:px-6">
-                  <Check aria-hidden="true" className="size-5 shrink-0 text-destructive" strokeWidth={2.5} />
+                <div key={benefit} className="flex min-h-16 items-center gap-4 rounded-2xl membership-gold-card border bg-background px-4 py-4 shadow-sm sm:px-6">
+                  <Check aria-hidden="true" className="size-5 shrink-0 membership-gold-text" strokeWidth={2.5} />
                   <span className="text-base leading-6 text-foreground sm:text-lg">{benefit}</span>
                 </div>
               ))}
             </div>
-            <Link href="/reservar" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full bg-destructive px-6 py-3 text-base font-bold text-destructive-foreground shadow-lg shadow-destructive/20 transition-transform hover:-translate-y-0.5">Quiero mi membresía VIP</Link>
+            <Link href="/reservar" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full membership-gold-button rounded-full px-6 py-3 text-base font-bold shadow-lg transition-transform hover:-translate-y-0.5">Quiero mi membresía VIP</Link>
           </div>
         </div>
       </div>

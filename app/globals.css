@@ -169,11 +169,25 @@
 }
 
 .membership-premium::before {
-  background: linear-gradient(110deg, transparent 0%, oklch(0.78 0.16 85 / 0.2) 46%, transparent 70%);
+  background: linear-gradient(125deg, transparent 8%, oklch(0.72 0.14 78 / 0.08) 34%, oklch(0.9 0.13 88 / 0.18) 48%, transparent 70%);
   content: "";
   inset: 0;
   pointer-events: none;
   position: absolute;
+}
+
+.membership-gold-text {
+  color: oklch(0.57 0.13 76);
+}
+
+.membership-gold-card {
+  border-color: oklch(0.72 0.14 78 / 0.38);
+}
+
+.membership-gold-button {
+  background: oklch(0.57 0.13 76);
+  color: oklch(0.99 0.02 90);
+  box-shadow: 0 12px 28px oklch(0.57 0.13 76 / 0.2);
 }
 
 .membership-metal {
