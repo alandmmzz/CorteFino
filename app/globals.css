@@ -206,11 +206,11 @@
 .barber-stripe {
   background: repeating-linear-gradient(
     135deg,
-    oklch(0.12 0 0) 0 18px,
-    oklch(0.28 0 0) 18px 36px,
+    oklch(0.62 0.2 25) 0 18px,
+    oklch(0.96 0 0) 18px 36px,
     oklch(0.48 0.12 250) 36px 54px,
-    oklch(0.28 0 0) 54px 72px,
-    oklch(0.42 0 0) 72px 90px,
-    oklch(0.28 0 0) 90px 108px
+    oklch(0.96 0 0) 54px 72px,
+    oklch(0.62 0.2 25) 72px 90px,
+    oklch(0.96 0 0) 90px 108px
   );
 }
