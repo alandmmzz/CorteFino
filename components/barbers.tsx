@@ -13,7 +13,7 @@ export function Barbers({ staff }: { staff: Staff[] }) {
         </div>
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {staff.map((barber) => (
-            <article key={barber.id} className="group grid overflow-hidden border border-border bg-card sm:grid-cols-[0.9fr_1.1fr]">
+            <article key={barber.id} className="barber-card group grid overflow-hidden border border-border bg-card transition duration-500 hover:border-foreground/35 sm:grid-cols-[0.9fr_1.1fr]">
               <div className="relative min-h-72 bg-secondary">
                 {barber.photoUrl ? <Image src={barber.photoUrl} alt={`Foto de ${barber.name}`} fill className="object-cover grayscale transition duration-500 group-hover:grayscale-0" sizes="(min-width: 768px) 25vw, 90vw" /> : <div className="flex size-full min-h-72 items-center justify-center font-serif text-7xl text-muted-foreground">{barber.name.charAt(0)}</div>}
               </div>

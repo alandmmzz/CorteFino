@@ -199,6 +199,37 @@
   width: 22rem;
 }
 
+.barber-card {
+  position: relative;
+  isolation: isolate;
+}
+
+.barber-card::before {
+  background: linear-gradient(90deg, oklch(0.62 0.2 25 / 0), oklch(0.62 0.2 25 / 0.3) 24%, oklch(0.96 0 0 / 0.16) 50%, oklch(0.48 0.12 250 / 0.3) 76%, oklch(0.48 0.12 250 / 0));
+  bottom: 0;
+  content: "";
+  filter: blur(18px);
+  height: 2px;
+  left: 8%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 8%;
+  transition: opacity 500ms ease;
+  z-index: 2;
+}
+
+.barber-card:hover::before {
+  opacity: 1;
+}
+
+.barber-card:hover {
+  box-shadow:
+    0 0 24px oklch(0.62 0.2 25 / 0.22),
+    0 0 38px oklch(0.96 0 0 / 0.1),
+    0 0 52px oklch(0.48 0.12 250 / 0.22);
+}
+
 .location-badge {
   background:
     linear-gradient(90deg, oklch(0.62 0.2 25 / 0.16), oklch(0.96 0 0 / 0.1) 48%, oklch(0.48 0.12 250 / 0.2)),
