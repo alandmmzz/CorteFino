@@ -45,7 +45,7 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
       ? getBookedTimes(selectedDate, selectedCategory, selectedStaffId)
       : Promise.all(staff.map((person) => getBookedTimes(selectedDate, selectedCategory, person.id))).then((results) => Array.from(new Set(results.flat())))
     Promise.all([availabilityRequest, getAvailableSchedule(selectedCategory)]).then(([available, schedule]) => { setAvailableSchedule(schedule); setBookedTimes(schedule.filter((time) => !available.includes(time))) }).finally(() => setIsLoadingTimes(false))
-  }, [selectedDate, selectedCategory, selectedStaffId])
+  }, [selectedDate, selectedCategory, selectedStaffId, staff])
 
   const bookingCategories = catalog?.map((item) => ({ ...item, treatments: item.treatments.map((treatment) => ({ ...treatment, id: String(treatment.id) })) })) ?? SERVICE_CATEGORIES
   const category = bookingCategories.find((item) => item.name === selectedCategory)

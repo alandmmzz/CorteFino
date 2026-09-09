@@ -65,6 +65,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   }
 
   const candidateStaffIds = staffId !== null ? [staffId] : activeStaff.map((person) => person.id)
+  if (candidateStaffIds.length === 0) return { ok: false, error: "No hay barberos disponibles para ese horario." }
   let assignedStaffId: number | null = staffId
   for (const candidateStaffId of candidateStaffIds) {
     const existingAtTime = await db
