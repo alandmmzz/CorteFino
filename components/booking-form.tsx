@@ -41,7 +41,10 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
       setIsLoadingTimes(false)
       return
     }
-    Promise.all([getBookedTimes(selectedDate, selectedCategory, selectedStaffId ?? undefined), getAvailableSchedule(selectedCategory)]).then(([available, schedule]) => { setAvailableSchedule(schedule); setBookedTimes(schedule.filter((time) => !available.includes(time))) }).finally(() => setIsLoadingTimes(false))
+    const availabilityRequest = selectedStaffId
+      ? getBookedTimes(selectedDate, selectedCategory, selectedStaffId)
+      : Promise.all(staff.map((person) => getBookedTimes(selectedDate, selectedCategory, person.id))).then((results) => Array.from(new Set(results.flat())))
+    Promise.all([availabilityRequest, getAvailableSchedule(selectedCategory)]).then(([available, schedule]) => { setAvailableSchedule(schedule); setBookedTimes(schedule.filter((time) => !available.includes(time))) }).finally(() => setIsLoadingTimes(false))
   }, [selectedDate, selectedCategory, selectedStaffId])
 
   const bookingCategories = catalog?.map((item) => ({ ...item, treatments: item.treatments.map((treatment) => ({ ...treatment, id: String(treatment.id) })) })) ?? SERVICE_CATEGORIES
@@ -108,7 +111,10 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
       </div>
       <fieldset>
         <legend className="mb-3 text-sm text-foreground">Elegí tu barbero</legend>
-        <div className="grid gap-2 sm:grid-cols-2">{staff.map((person) => <button key={person.id} type="button" onClick={() => setSelectedStaffId(person.id)} className={`flex min-h-14 items-center gap-3 rounded-lg border p-3 text-left ${selectedStaffId === person.id ? "border-primary bg-primary/10" : "border-border bg-card"}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-xs font-medium">{person.photoUrl ? <img src={person.photoUrl} alt="" className="h-full w-full object-cover" /> : person.name.split(" ").map((part) => part[0]).join("")}</span><span className="text-sm text-foreground">{person.name}</span></button>)}</div>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <button type="button" onClick={() => setSelectedStaffId(null)} className={`flex min-h-14 items-center gap-3 rounded-lg border p-3 text-left sm:col-span-2 ${selectedStaffId === null ? "border-primary bg-primary/10" : "border-border bg-card"}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Scissors className="size-4" aria-hidden="true" /></span><span><span className="block text-sm text-foreground">Cualquier barbero</span><span className="block text-xs text-muted-foreground">Mostrá todos los horarios disponibles</span></span></button>
+          {staff.map((person) => <button key={person.id} type="button" onClick={() => setSelectedStaffId(person.id)} className={`flex min-h-14 items-center gap-3 rounded-lg border p-3 text-left ${selectedStaffId === person.id ? "border-primary bg-primary/10" : "border-border bg-card"}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-xs font-medium">{person.photoUrl ? <img src={person.photoUrl} alt="" className="h-full w-full object-cover" /> : person.name.split(" ").map((part) => part[0]).join("")}</span><span className="text-sm text-foreground">{person.name}</span></button>)}
+        </div>
       </fieldset>
       <fieldset>
         <legend className="mb-3 text-sm text-foreground">Elegí una categoría</legend>
@@ -139,7 +145,7 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
         <>
           <div><p className="mb-2 text-sm text-foreground">Elegí el día</p><DayPicker selected={selectedDate} onSelect={setSelectedDate} /></div>
           <div><p className="mb-2 text-sm text-foreground">{selectedDate ? `Horarios disponibles · ${formatSelected(selectedDate)}` : "Horarios disponibles"}</p>{!selectedDate ? <p className="rounded-md border border-dashed border-border px-4 py-6 text-center text-sm text-muted-foreground">Seleccioná primero un día para ver los horarios.</p> : isLoadingTimes ? <p className="rounded-md border border-border px-4 py-6 text-center text-sm text-muted-foreground">Cargando horarios...</p> : <div className="grid grid-cols-4 gap-2 sm:grid-cols-6">{(availableSchedule.length ? availableSchedule : getScheduleForCategory(selectedCategory ?? "")).map((time) => { const booked = bookedTimes.includes(time); const active = selectedTime === time; return <button key={time} type="button" disabled={booked} onClick={() => setSelectedTime(time)} className={`rounded-md border px-2 py-2 text-xs tabular-nums transition-colors ${active ? "border-primary bg-primary text-primary-foreground" : booked ? "cursor-not-allowed border-border text-muted-foreground/40 line-through" : "border-border text-foreground hover:border-primary hover:text-primary"}`}>{time}</button> })}</div>}</div>
-          <button type="submit" disabled={isPending || !selectedDate || !selectedTime || !selectedCategory || !selectedStaffId || selectedTreatments.length === 0} className="w-full rounded-full bg-primary px-8 py-3.5 text-sm tracking-[0.15em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60">{isPending ? "PROCESANDO..." : DEPOSIT_ENABLED ? "CONTINUAR A LA SEÑA" : "CONTINUAR"}</button>
+          <button type="submit" disabled={isPending || !selectedDate || !selectedTime || !selectedCategory || selectedTreatments.length === 0} className="w-full rounded-full bg-primary px-8 py-3.5 text-sm tracking-[0.15em] text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60">{isPending ? "PROCESANDO..." : DEPOSIT_ENABLED ? "CONTINUAR A LA SEÑA" : "CONTINUAR"}</button>
         </>
       )}
       {message && <p role="status" className={`rounded-md px-4 py-3 text-center text-sm ${message.ok ? "bg-primary/10 text-primary" : "bg-destructive/10 text-destructive"}`}>{message.text}</p>}

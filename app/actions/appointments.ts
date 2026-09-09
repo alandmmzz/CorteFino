@@ -30,7 +30,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   const staffIdValue = String(formData.get("staffId") ?? "").trim()
   const staffId = staffIdValue ? Number(staffIdValue) : null
 
-  if (!name || !phone || !service || !appointmentDate || !appointmentTime || !staffId || !Number.isInteger(staffId)) {
+  if (!name || !phone || !service || !appointmentDate || !appointmentTime || (staffId !== null && !Number.isInteger(staffId))) {
     return { ok: false, error: "Por favor completá todos los campos." }
   }
 
@@ -41,8 +41,8 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     return { ok: false, error: "Seleccioná un tratamiento válido." }
   }
   const catalog = await getAllServiceCatalog()
-  const [selectedStaff] = await db.select({ id: staff.id }).from(staff).where(and(eq(staff.id, staffId), eq(staff.active, true)))
-  if (!selectedStaff) return { ok: false, error: "Seleccioná un barbero válido." }
+  const activeStaff = await db.select({ id: staff.id }).from(staff).where(eq(staff.active, true))
+  if (staffId !== null && !activeStaff.some((person) => person.id === staffId)) return { ok: false, error: "Seleccioná un barbero válido." }
   const category = catalog.find((item) => item.name === selection.category)
   if (!isOnlineCategory(selection.category)) {
     return { ok: false, error: "Seleccioná Barbería." }
@@ -64,23 +64,24 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     return { ok: false, error: "Elegí un horario disponible para esta categoría." }
   }
 
-  const existingAtTime = await db
-    .select({ id: appointments.id, service: appointments.service, appointmentTime: appointments.appointmentTime })
-    .from(appointments)
-    .where(
-      and(
-        eq(appointments.appointmentDate, appointmentDate),
-        eq(appointments.staffId, staffId),
-        ne(appointments.status, "cancelado"),
-      ),
-    )
-  const booked = existingAtTime.map((item) => {
-    const bookedCategory = getAppointmentCategory(item.service)
-    return { category: bookedCategory, time: item.appointmentTime, durationMinutes: 30 }
-  })
-  if (!isTimeAvailable(selection.category, appointmentTime, booked, category.durationMinutes)) {
-    return { ok: false, error: "Ese horario se superpone con otro turno o supera la capacidad disponible." }
+  const candidateStaffIds = staffId !== null ? [staffId] : activeStaff.map((person) => person.id)
+  let assignedStaffId: number | null = staffId
+  for (const candidateStaffId of candidateStaffIds) {
+    const existingAtTime = await db
+      .select({ id: appointments.id, service: appointments.service, appointmentTime: appointments.appointmentTime })
+      .from(appointments)
+      .where(and(eq(appointments.appointmentDate, appointmentDate), eq(appointments.staffId, candidateStaffId), ne(appointments.status, "cancelado")))
+    const booked = existingAtTime.map((item) => {
+      const bookedCategory = getAppointmentCategory(item.service)
+      return { category: bookedCategory, time: item.appointmentTime, durationMinutes: 30 }
+    })
+    if (isTimeAvailable(selection.category, appointmentTime, booked, category.durationMinutes)) {
+      assignedStaffId = candidateStaffId
+      break
+    }
+    if (staffId !== null) return { ok: false, error: "Ese horario se superpone con otro turno o supera la capacidad disponible." }
   }
+  if (assignedStaffId === null) return { ok: false, error: "Ese horario no está disponible con ninguno de nuestros barberos." }
 
   const price = catalogPrice(service, catalog)
   if (price <= 0) {
@@ -96,7 +97,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
       service,
       appointmentDate,
       appointmentTime,
-      staffId,
+      staffId: assignedStaffId,
       price,
     })
     .returning({ id: appointments.id })
