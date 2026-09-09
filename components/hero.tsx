@@ -21,8 +21,7 @@ export function Hero() {
           <p className="mt-7 max-w-xl text-base leading-7 text-foreground/70 sm:text-lg">
             Elegí tu servicio, tu barbero y tu horario. Una experiencia cuidada para que salgas sintiéndote tan bien como te ves.
           </p>
-          <div className="my-8 h-1 w-28 overflow-hidden rounded-full opacity-90" aria-hidden="true"><div className="barber-stripe h-full w-full" /></div>
-          <div className="flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-wrap gap-3">
             <a href="/reservar" className="hero-button-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5">
               Reservá ya <ArrowRight aria-hidden="true" className="size-4" />
             </a>
@@ -36,7 +35,7 @@ export function Hero() {
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Profesionales calificados</li>
           </ul>
         </div>
-        <div className="relative min-h-[28rem] overflow-hidden border-l border-background/10 lg:min-h-full"><div className="absolute inset-y-0 left-0 z-10 hidden w-1.5 opacity-80 lg:block" aria-hidden="true"><div className="barber-stripe h-full w-full" /></div>
+        <div className="relative min-h-[28rem] overflow-hidden border-l border-background/10 lg:min-h-full">
           <Image src="/barber-shop-hero.png" alt="Interior de la barbería Corte Fino en Santa Catalina" fill priority className="object-cover" />
           <div className="absolute inset-0 bg-background/20" />
           <div className="absolute inset-x-5 bottom-5 flex items-center justify-between gap-3 rounded-2xl border border-foreground/20 bg-background/80 p-3 shadow-[0_0_36px_oklch(0.9_0_0/0.1)] backdrop-blur-md sm:inset-x-8 sm:bottom-8 sm:p-4">
