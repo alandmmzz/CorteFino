@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { SERVICE_CATEGORIES, formatUYU } from "@/lib/services"
-import { Brush, Scissors, Sparkles } from "lucide-react"
+import { ArrowLeft, ArrowRight, Brush, Scissors, Sparkles } from "lucide-react"
 import Link from "next/link"
 
 type PublicService = { name: string; description: string; treatments: readonly { id: string; name: string; price: number | null; promoPrice?: number | null; note?: string }[] }
@@ -30,29 +30,52 @@ function getTreatmentImage(treatment: { id: string; name: string }) {
 
 export function Services({ catalog = services }: { catalog?: PublicService[] } = {}) {
   const carouselRef = useRef<HTMLDivElement>(null)
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activePage, setActivePage] = useState(0)
+  const [cardsPerPage, setCardsPerPage] = useState(1)
   const treatments = catalog.flatMap((service) => service.treatments.map((treatment, index) => ({ service, treatment, index })))
+  const pageCount = Math.max(1, Math.ceil(treatments.length / cardsPerPage))
+
+  useEffect(() => {
+    const updateCardsPerPage = () => setCardsPerPage(window.matchMedia("(min-width: 768px)").matches ? 3 : 1)
+    updateCardsPerPage()
+    window.addEventListener("resize", updateCardsPerPage)
+    return () => window.removeEventListener("resize", updateCardsPerPage)
+  }, [])
 
   useEffect(() => {
     const carousel = carouselRef.current
     if (!carousel) return
-    const updateActiveIndex = () => {
+    const updateActivePage = () => {
       const cards = Array.from(carousel.children)
       const nearest = cards.reduce((closest, card, index) => {
         const distance = Math.abs((card as HTMLElement).offsetLeft - carousel.scrollLeft)
         return distance < closest.distance ? { index, distance } : closest
       }, { index: 0, distance: Number.POSITIVE_INFINITY })
-      setActiveIndex(nearest.index)
+      setActivePage(Math.floor(nearest.index / cardsPerPage))
     }
-    carousel.addEventListener("scroll", updateActiveIndex, { passive: true })
-    updateActiveIndex()
-    return () => carousel.removeEventListener("scroll", updateActiveIndex)
-  }, [treatments.length])
+    carousel.addEventListener("scroll", updateActivePage, { passive: true })
+    updateActivePage()
+    return () => carousel.removeEventListener("scroll", updateActivePage)
+  }, [cardsPerPage, treatments.length])
 
-  const scrollToTreatment = (index: number) => {
-    const card = carouselRef.current?.children[index] as HTMLElement | undefined
+  useEffect(() => {
+    if (pageCount < 2) return
+    const timer = window.setInterval(() => {
+      setActivePage((page) => (page + 1) % pageCount)
+    }, 5000)
+    return () => window.clearInterval(timer)
+  }, [pageCount])
+
+  useEffect(() => {
+    const carousel = carouselRef.current
+    if (!carousel) return
+    const card = carousel.children[activePage * cardsPerPage] as HTMLElement | undefined
     card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
-  }
+  }, [activePage, cardsPerPage])
+
+  const goToPage = (page: number) => setActivePage(Math.max(0, Math.min(page, pageCount - 1)))
+  const previousPage = () => goToPage(activePage === 0 ? pageCount - 1 : activePage - 1)
+  const nextPage = () => goToPage((activePage + 1) % pageCount)
 
   return (
     <section id="servicios" className="bg-background px-5 py-12 text-foreground sm:px-8 sm:py-16 lg:px-12 xl:px-16">
@@ -65,6 +88,7 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
           <Link href="/reservar" className="w-fit rounded-full border border-primary px-5 py-2.5 text-xs font-medium tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground">VER TODOS</Link>
         </div>
         <div className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55"><Scissors aria-hidden="true" className="size-4 text-primary" /><span className="h-px w-10 bg-primary" /><span>Barbería</span></div>
+        <div className="relative">
         <div ref={carouselRef} className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:overflow-x-auto">
           {treatments.map(({ service, treatment, index }) => {
             const TreatmentIcon = serviceIcons[index % serviceIcons.length]
@@ -80,9 +104,12 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
             )
           })}
         </div>
-        <div className="mt-7 flex justify-center gap-2" aria-label={`Tratamiento ${activeIndex + 1} de ${treatments.length}`}>
-          {treatments.map((item, index) => (
-            <button key={item.treatment.id} type="button" onClick={() => scrollToTreatment(index)} aria-label={`Ver ${item.treatment.name}`} aria-current={activeIndex === index ? "true" : undefined} className={`size-2 rounded-full transition-colors ${activeIndex === index ? "bg-primary" : "bg-foreground/25"}`} />
+        <button type="button" onClick={previousPage} aria-label="Tratamientos anteriores" className="absolute left-2 top-1/2 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/90 p-2 text-foreground transition-colors hover:border-primary hover:text-primary md:block"><ArrowLeft aria-hidden="true" className="size-4" /></button>
+        <button type="button" onClick={nextPage} aria-label="Siguientes tratamientos" className="absolute right-2 top-1/2 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/90 p-2 text-foreground transition-colors hover:border-primary hover:text-primary md:block"><ArrowRight aria-hidden="true" className="size-4" /></button>
+        </div>
+        <div className="mt-7 flex justify-center gap-2" aria-label={`Página ${activePage + 1} de ${pageCount}`}>
+          {Array.from({ length: pageCount }, (_, page) => (
+            <button key={page} type="button" onClick={() => goToPage(page)} aria-label={`Ver página ${page + 1}`} aria-current={activePage === page ? "true" : undefined} className={`size-2 rounded-full transition-colors ${activePage === page ? "bg-primary" : "bg-foreground/25"}`} />
           ))}
         </div>
       </div>
