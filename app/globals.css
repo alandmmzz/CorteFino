@@ -50,27 +50,27 @@
 }
 
 :root {
-  color-scheme: light;
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.18 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0 0);
-  --primary: oklch(0.18 0 0);
-  --whatsapp: oklch(0.18 0 0);
-  --whatsapp-foreground: oklch(1 0 0);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.28 0 0);
-  --muted: oklch(0.95 0 0);
-  --muted-foreground: oklch(0.48 0 0);
+  color-scheme: dark;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --whatsapp: oklch(0.205 0 0);
+  --whatsapp-foreground: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.91 0.08 250);
   --accent-foreground: oklch(0.24 0.04 250);
   --destructive: oklch(0.62 0.2 20);
-  --border: oklch(0.86 0 0);
-  --input: oklch(0.86 0 0);
-  --ring: oklch(0.48 0.12 250);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.18 0 0);
   --chart-2: oklch(0.48 0.12 250);
   --chart-3: oklch(0.62 0.2 20);
@@ -163,6 +163,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body {
+    background-color: oklch(0.145 0 0);
+    color: oklch(0.985 0 0);
+  }
   body {
     @apply bg-background text-foreground;
   }
@@ -201,11 +206,11 @@
 .barber-stripe {
   background: repeating-linear-gradient(
     135deg,
-    oklch(0.18 0 0) 0 18px,
-    oklch(1 0 0) 18px 36px,
+    oklch(0.12 0 0) 0 18px,
+    oklch(0.28 0 0) 18px 36px,
     oklch(0.48 0.12 250) 36px 54px,
-    oklch(1 0 0) 54px 72px,
-    oklch(0.62 0.2 20) 72px 90px,
-    oklch(1 0 0) 90px 108px
+    oklch(0.28 0 0) 54px 72px,
+    oklch(0.42 0 0) 72px 90px,
+    oklch(0.28 0 0) 90px 108px
   );
 }
