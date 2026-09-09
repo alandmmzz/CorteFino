@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { ArrowRight, Check, MapPin } from "lucide-react"
+import { ArrowRight, Brush, Check, MapPin, Scissors, Sparkles } from "lucide-react"
 
 export function Hero() {
   return (
@@ -26,9 +26,9 @@ export function Hero() {
             </a>
           </div>
           <ul className="show-up show-up-5 mt-8 flex flex-wrap gap-x-3 gap-y-2 text-xs text-foreground/60" aria-label="Beneficios de Corte Fino">
-            <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Agenda online</li>
-            <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Atención personalizada</li>
-            <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Profesionales calificados</li>
+            <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Scissors aria-hidden="true" className="size-3.5 text-foreground/80" /> Agenda online</li>
+            <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Brush aria-hidden="true" className="size-3.5 text-foreground/80" /> Atención personalizada</li>
+            <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Sparkles aria-hidden="true" className="size-3.5 text-foreground/80" /> Profesionales calificados</li>
           </ul>
         </div>
         <div className="relative min-h-[28rem] overflow-hidden border-l border-background/10 lg:min-h-full">
