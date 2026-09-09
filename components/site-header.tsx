@@ -24,7 +24,7 @@ export function SiteHeader() {
           : "bg-background/90"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-2.5 sm:px-6 sm:py-3">
         <Link href="/" className="block shrink-0" aria-label="Corte Fino, inicio">
           <span className="font-serif text-[1.65rem] font-medium tracking-[0.16em] text-foreground sm:text-3xl sm:tracking-[0.22em]">CORTE FINO</span>
         </Link>
@@ -41,9 +41,9 @@ export function SiteHeader() {
         </nav>
         <Link
           href={isBookingPage ? "/" : "/reservar"}
-          className="rounded-full bg-primary px-4 py-3 text-[0.7rem] font-medium tracking-[0.16em] text-primary-foreground transition-opacity hover:opacity-90 sm:px-5"
+          className="rounded-full bg-primary px-3.5 py-2 text-[0.65rem] font-medium tracking-[0.16em] text-primary-foreground transition-opacity hover:opacity-90 sm:px-5"
         >
-          {isBookingPage ? "VOLVER AL INICIO" : "RESERVÁ YA"}
+          {isBookingPage ? "INICIO" : "RESERVÁ YA"}
         </Link>
       </div>
     </header>
