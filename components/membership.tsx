@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Check } from "lucide-react"
+import { Check, Crown } from "lucide-react"
 
 type Membership = { name: string; price: number; chemicalDiscount: number; monthlyCuts: number; description: string; active: boolean }
 
