@@ -43,15 +43,8 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
   }, [])
 
   useEffect(() => {
-    const carousel = carouselRef.current
-    if (!carousel) return
-    const updateActivePage = () => {
-      const pageWidth = carousel.clientWidth
-      setActivePage(pageWidth ? Math.min(pageCount - 1, Math.round(carousel.scrollLeft / pageWidth)) : 0)
-    }
-    carousel.addEventListener("scroll", updateActivePage, { passive: true })
-    updateActivePage()
-    return () => carousel.removeEventListener("scroll", updateActivePage)
+    setActivePage(0)
+    if (carouselRef.current) carouselRef.current.scrollLeft = 0
   }, [cardsPerPage, treatments.length])
 
   useEffect(() => {
@@ -62,21 +55,14 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
     return () => window.clearInterval(timer)
   }, [pageCount])
 
-  useEffect(() => {
-    const carousel = carouselRef.current
-    if (!carousel) return
-    carousel.scrollLeft = activePage === pageCount - 1 ? carousel.scrollWidth - carousel.clientWidth : activePage * carousel.clientWidth
-  }, [activePage, cardsPerPage])
-
   const goToPage = (page: number) => {
     const nextPageIndex = Math.max(0, Math.min(page, pageCount - 1))
-    setActivePage(nextPageIndex)
     const carousel = carouselRef.current
-    if (carousel) {
-      const target = nextPageIndex === pageCount - 1 ? carousel.scrollWidth - carousel.clientWidth : nextPageIndex * carousel.clientWidth
-      carousel.scrollLeft = target
-      requestAnimationFrame(() => { carousel.scrollLeft = target })
-    }
+    if (!carousel) return
+    const firstCard = carousel.children[nextPageIndex * cardsPerPage] as HTMLElement | undefined
+    if (!firstCard) return
+    setActivePage(nextPageIndex)
+    carousel.scrollTo({ left: firstCard.offsetLeft, behavior: "smooth" })
   }
   const previousPage = () => goToPage(activePage === 0 ? pageCount - 1 : activePage - 1)
   const nextPage = () => goToPage((activePage + 1) % pageCount)
@@ -108,8 +94,8 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
             )
           })}
         </div>
-        <button type="button" onClick={previousPage} aria-label="Tratamientos anteriores" className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary hover:text-primary md:block"><ArrowLeft aria-hidden="true" className="size-4" /></button>
-        <button type="button" onClick={nextPage} aria-label="Siguientes tratamientos" className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary hover:text-primary md:block"><ArrowRight aria-hidden="true" className="size-4" /></button>
+        <button type="button" onClick={previousPage} aria-label="Tratamientos anteriores" className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-foreground/20 bg-background/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary hover:text-primary"><ArrowLeft aria-hidden="true" className="size-4" /></button>
+        <button type="button" onClick={nextPage} aria-label="Siguientes tratamientos" className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-foreground/20 bg-background/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary hover:text-primary"><ArrowRight aria-hidden="true" className="size-4" /></button>
         </div>
         <div className="mt-7 flex justify-center gap-2" aria-label={`Página ${activePage + 1} de ${pageCount}`}>
           {Array.from({ length: pageCount }, (_, page) => (
