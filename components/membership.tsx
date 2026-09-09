@@ -17,9 +17,9 @@ export function Membership({ membership }: { membership: Membership }) {
   return (
     <section className="membership-premium relative overflow-hidden bg-background px-5 py-12 text-foreground sm:px-8 sm:py-16">
       <div className="relative mx-auto max-w-6xl">
-        <div className="mb-6 flex items-center gap-4 text-[10px] uppercase tracking-[0.32em] text-foreground/55">
+        <div className="mb-6 flex items-center gap-4">
           <span className="h-px flex-1 bg-foreground/15" />
-          <span>Sector exclusivo</span>
+          <span className="inline-flex items-center gap-2 rounded-full border membership-gold-badge px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] membership-gold-text shadow-[0_0_22px_oklch(0.72_0.14_78/0.12)]"><Crown aria-hidden="true" className="size-3.5" /> Membresía mensual premium</span>
           <span className="h-px flex-1 bg-foreground/15" />
         </div>
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
