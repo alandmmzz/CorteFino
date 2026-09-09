@@ -17,6 +17,11 @@ const services: PublicService[] = SERVICE_CATEGORIES.map((category) => ({
   treatments: category.treatments,
 }))
 
+function getTreatmentImage(treatment: { id: string; name: string }) {
+  const slug = treatment.name.toLowerCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g, "").replace(/\\s+/g, "-")
+  return treatmentImages[treatment.id] ?? treatmentImages[slug] ?? "/treatments/corte.png?v=3"
+}
+
 export function Services({ catalog = services }: { catalog?: PublicService[] } = {}) {
   return (
     <section id="servicios" className="bg-background px-5 py-12 text-foreground sm:px-8 sm:py-16 lg:px-12 xl:px-16">
@@ -32,7 +37,7 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-2 md:overflow-visible xl:grid-cols-2">
           {catalog.flatMap((service) => service.treatments.map((treatment, index) => (
             <article key={treatment.id} className="group flex min-h-56 min-w-[calc(100vw-2.5rem)] snap-start flex-col overflow-hidden rounded-2xl border border-foreground/15 bg-foreground/[0.045] shadow-[0_16px_40px_oklch(0_0_0/0.2)] transition-colors hover:border-primary/60 sm:min-w-[22rem] md:min-w-0">
-              <img src={treatmentImages[treatment.id]} alt={`Foto ilustrativa de ${treatment.name}`} className="h-28 w-full object-cover opacity-80 grayscale transition duration-500 group-hover:opacity-100 group-hover:grayscale-0" />
+              <img src={getTreatmentImage(treatment)} alt={`Foto ilustrativa de ${treatment.name}`} className="h-28 w-full object-cover opacity-80 grayscale transition duration-500 group-hover:opacity-100 group-hover:grayscale-0" />
               <div className="flex flex-1 flex-col p-5 sm:p-6">
               <div className="flex items-start justify-between gap-4"><div className="flex items-start gap-3"><span className="font-mono text-xs text-primary/80">{String(index + 1).padStart(2, "0")}</span><h3 className="font-serif text-2xl text-foreground">{treatment.name}</h3></div><span className="inline-flex shrink-0 rounded-full border border-foreground/15 bg-foreground/[0.06] px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-foreground/65">30 min</span></div>
               <p className="mt-4 max-w-md text-sm leading-6 text-foreground/65">{service.description}</p>
