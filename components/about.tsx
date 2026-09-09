@@ -14,7 +14,7 @@ export function About() {
           En Corte Fino combinamos técnica, atención y productos de calidad para que cada visita tenga el resultado que buscás. Vení a encontrar tu próximo estilo.
         </p>
         <p className="mt-8 text-xs uppercase tracking-[0.3em] text-primary">
-          San Martín 2825 · Reducto · Montevideo
+          Santa Catalina · Montevideo
         </p>
       </div>
     </section>

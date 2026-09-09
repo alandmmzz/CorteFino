@@ -19,11 +19,10 @@ export function BookingSection() {
           </p>
           <div className="mt-8 space-y-3 text-sm text-foreground">
             <p className="flex items-center gap-3">
-              <span className="text-primary">·</span> San Martín 2825, Reducto,
-              Montevideo
+              <span className="text-primary">·</span> Santa Catalina · Montevideo
             </p>
             <p className="flex items-center gap-3">
-              <span className="text-primary">·</span> Lunes a sábado · 09 a 20 hs
+              <span className="text-primary">·</span> Lun–vie 10:00–20:00 · sáb 10:00–18:00
             </p>
           </div>
         </div>

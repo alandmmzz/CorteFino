@@ -26,6 +26,6 @@ export function formatUYU(amount: number): string { return new Intl.NumberFormat
 export const BANK_ACCOUNT = { bank: "", accountHolder: "Corte Fino", accountType: "", accountNumber: "", documentId: "", alias: "", whatsapp: "" }
 export const MERCADO_PAGO_PUBLIC_TOKEN = ""
 
-export const BARBERSHOP_HOURS = { opening: "09:00", closing: "20:00", durationMinutes: 30 }
-export const BARBERSHOP_SCHEDULE = Array.from({ length: 22 }, (_, index) => { const minutes = 9 * 60 + index * 30; return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}` })
+export const BARBERSHOP_HOURS = { opening: "10:00", closing: "20:00", saturdayClosing: "18:00", durationMinutes: 30 }
+export const BARBERSHOP_SCHEDULE = Array.from({ length: 20 }, (_, index) => { const minutes = 10 * 60 + index * 30; return `${String(Math.floor(minutes / 60)).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}` })
 

@@ -35,7 +35,7 @@ export function SiteFooter() {
           Tu estilo, bien hecho.
         </p>
         <p className="mt-6 text-xs tracking-wide text-muted-foreground">
-          San Martín 2825 · Reducto · Montevideo, Uruguay
+          Santa Catalina · Montevideo, Uruguay
         </p>
         <div className="mt-4 flex items-center justify-center gap-3">
           <a

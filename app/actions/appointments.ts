@@ -59,7 +59,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     return { ok: false, error: "Elegí una fecha válida a partir de hoy." }
   }
 
-  const allowedTimes = getScheduleForCategory(selection.category)
+  const allowedTimes = await getAvailableSchedule(selection.category, appointmentDate)
   if (!allowedTimes.includes(appointmentTime)) {
     return { ok: false, error: "Elegí un horario disponible para esta categoría." }
   }
@@ -121,9 +121,20 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   return { ok: true, id: row.id }
 }
 
-export async function getAvailableSchedule(category: string) {
+export async function getAvailableSchedule(category: string, date?: string) {
   const rows = await getServiceSchedules()
-  return rows.filter((row) => row.serviceCategory === category).map((row) => row.startTime)
+  const weekday = date ? new Date(`${date}T12:00:00`).getDay() : null
+  if (weekday === 0) return []
+  const saturday = weekday === 6
+  const closingMinutes = saturday ? 18 * 60 : 20 * 60
+  return rows
+    .filter((row) => row.serviceCategory === category)
+    .map((row) => row.startTime)
+    .filter((time) => {
+      const [hours, minutes] = time.split(":").map(Number)
+      const totalMinutes = hours * 60 + minutes
+      return totalMinutes >= 10 * 60 && totalMinutes < closingMinutes
+    })
 }
 
 export async function getServiceSchedules() {
