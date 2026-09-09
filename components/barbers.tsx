@@ -4,8 +4,8 @@ import type { Staff } from "@/lib/db/schema"
 
 export function Barbers({ staff }: { staff: Staff[] }) {
   return (
-    <section id="barberos" className="bg-background px-6 py-20 sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-6xl">
+    <section id="barberos" className="bg-background px-5 py-12 sm:px-8 sm:py-16 lg:px-12 xl:px-16">
+      <div className="mx-auto max-w-7xl">
         <div className="max-w-2xl">
           <p className="text-xs uppercase tracking-[0.32em] text-accent-foreground">Nuestro equipo</p>
           <h2 className="mt-4 font-serif text-4xl leading-tight text-foreground sm:text-6xl">Conocé a nuestros barberos</h2>

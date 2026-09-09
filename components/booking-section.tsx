@@ -3,9 +3,9 @@ import { ArrowRight } from "lucide-react"
 
 export function BookingSection() {
   return (
-    <section id="agenda" className="bg-background py-16 md:py-24">
-      <div className="mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
-        <div>
+    <section id="agenda" className="bg-background px-5 py-12 sm:px-8 sm:py-16 lg:px-12 xl:px-16">
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-0 text-center">
+        <div className="max-w-2xl">
           <p className="mb-3 text-xs uppercase tracking-[0.4em] text-primary">
             Reservá tu momento
           </p>
