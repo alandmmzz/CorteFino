@@ -215,6 +215,11 @@
   color: oklch(0.57 0.13 76);
 }
 
+.membership-gold-badge {
+  border: 1px solid oklch(0.72 0.14 78 / 0.4);
+  background: oklch(0.72 0.14 78 / 0.08);
+}
+
 .membership-gold-card {
   border-color: oklch(0.72 0.14 78 / 0.38);
 }

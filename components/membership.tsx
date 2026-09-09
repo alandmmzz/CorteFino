@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Check } from "lucide-react"
+import { Check, Crown } from "lucide-react"
 
 type Membership = { name: string; price: number; chemicalDiscount: number; monthlyCuts: number; description: string; active: boolean }
 
@@ -24,7 +24,10 @@ export function Membership({ membership }: { membership: Membership }) {
         </div>
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div className="text-center lg:text-left">
-            <h2 className="membership-metal mt-4 max-w-xl font-serif text-5xl font-bold leading-[0.88] tracking-[-0.035em] text-balance sm:text-8xl lg:mx-0 mx-auto">{membership.name}</h2>
+            <div className="flex flex-col items-center gap-4 lg:items-start">
+              <span className="inline-flex items-center gap-2 rounded-full border membership-gold-badge px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] membership-gold-text shadow-[0_0_22px_oklch(0.72_0.14_78/0.12)]"><Crown aria-hidden="true" className="size-3.5" /> Deluxe</span>
+              <h2 className="membership-metal max-w-xl font-serif text-5xl font-bold leading-[0.88] tracking-[-0.035em] text-balance sm:text-8xl lg:mx-0 mx-auto">{membership.name}</h2>
+            </div>
             <p className="mt-6 max-w-md text-base leading-7 text-foreground/70 lg:mx-0 mx-auto">{membership.description}</p>
             <p className="mt-5 font-serif text-2xl font-semibold text-foreground">{membership.price ? `$${membership.price.toLocaleString("es-AR")}` : "A consultar"}<span className="ml-2 font-sans text-sm font-normal text-foreground/60">por mes</span></p>
           </div>
