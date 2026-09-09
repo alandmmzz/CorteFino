@@ -3,9 +3,9 @@ import { ArrowRight } from "lucide-react"
 
 export function BookingSection() {
   return (
-    <section id="agenda" className="bg-background py-16 md:py-24">
-      <div className="mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
-        <div>
+    <section id="agenda" className="bg-background px-5 py-12 sm:px-8 sm:py-16 lg:px-12 xl:px-16">
+      <div className="mx-auto flex max-w-7xl flex-col items-center px-0 text-center">
+        <div className="max-w-2xl">
           <p className="mb-3 text-xs uppercase tracking-[0.4em] text-primary">
             Reservá tu momento
           </p>
@@ -19,11 +19,10 @@ export function BookingSection() {
           </p>
           <div className="mt-8 space-y-3 text-sm text-foreground">
             <p className="flex items-center gap-3">
-              <span className="text-primary">·</span> San Martín 2825, Reducto,
-              Montevideo
+              <span className="text-primary">·</span> Santa Catalina · Montevideo
             </p>
             <p className="flex items-center gap-3">
-              <span className="text-primary">·</span> Lunes a sábado · 09 a 20 hs
+              <span className="text-primary">·</span> Lun–vie 10:00–20:00 · sáb 10:00–18:00
             </p>
           </div>
         </div>

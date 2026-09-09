@@ -3,11 +3,12 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { WhatsAppFloat } from "@/components/whatsapp-float"
 import { getServiceCatalog } from "@/lib/db/services"
+import { getStaff } from "@/app/actions/appointments"
 
 export const dynamic = "force-dynamic"
 
 export default async function BookingPage() {
-  const catalog = await getServiceCatalog()
+  const [catalog, staff] = await Promise.all([getServiceCatalog(), getStaff()])
 
   return (
     <main className="min-h-screen bg-background pt-20">
@@ -19,7 +20,7 @@ export default async function BookingPage() {
             <h1 className="text-balance font-serif text-4xl text-foreground md:text-5xl">Agendá tu turno</h1>
             <p className="mx-auto mt-5 max-w-xl leading-relaxed text-muted-foreground">Completá tus datos y elegí el día y horario que mejor te queden.</p>
           </div>
-          <div className="rounded-xl border border-border bg-card/60 p-4 shadow-sm sm:p-8"><BookingForm catalog={catalog} /></div>
+          <div className="rounded-xl border border-border bg-card/60 p-4 shadow-sm sm:p-8"><BookingForm catalog={catalog} staff={staff} /></div>
         </div>
       </section>
       <SiteFooter />

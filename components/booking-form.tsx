@@ -3,21 +3,22 @@
 import { createAppointment, getAvailableSchedule, getBookedTimes } from "@/app/actions/appointments"
 import { DayPicker } from "@/components/day-picker"
 import { DEPOSIT_ENABLED, SERVICE_CATEGORIES, formatUYU } from "@/lib/services"
-import { getScheduleForCategory, isOnlineCategory, whatsappUrl } from "@/lib/schedule"
-import { Check, ChevronDown, Footprints, Hand, HeartPulse, Sparkles, Flower2, MessageCircle, Info } from "lucide-react"
+import { getScheduleForCategory } from "@/lib/schedule"
+import { Check, ChevronDown, Scissors, Info } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
 
 const inputClass = "w-full rounded-md border border-input bg-card px-4 py-3 text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
-const icons = { Nails: Hand, "Cosmetología": Sparkles, Masajes: HeartPulse, Pedicuría: Footprints, "Depilación": Flower2, Promos: Sparkles }
+const icons = { "Barbería": Scissors }
 
 function formatSelected(key: string) {
   return new Date(`${key}T00:00:00`).toLocaleDateString("es-UY", { weekday: "long", day: "numeric", month: "long" })
 }
 
 type BookingCatalog = Array<{ name: string; description: string; treatments: Array<{ id: number | string; name: string; price: number | null; promoPrice?: number | null; note?: string }> }>
+type BookingStaff = { id: number; name: string; photoUrl: string | null }
 
-export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
+export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staff: BookingStaff[] }) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [isLoadingTimes, setIsLoadingTimes] = useState(false)
@@ -25,6 +26,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null)
   const [selectedTreatments, setSelectedTreatments] = useState<string[]>([])
   const [bookedTimes, setBookedTimes] = useState<string[]>([])
   const [availableSchedule, setAvailableSchedule] = useState<string[]>([])
@@ -34,13 +36,16 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
     if (!selectedDate) { setBookedTimes([]); return }
     setIsLoadingTimes(true)
     setSelectedTime(null)
-    if (!selectedCategory || !isOnlineCategory(selectedCategory)) {
+    if (!selectedCategory) {
       setBookedTimes([])
       setIsLoadingTimes(false)
       return
     }
-    Promise.all([getBookedTimes(selectedDate, selectedCategory), getAvailableSchedule(selectedCategory)]).then(([available, schedule]) => { setAvailableSchedule(schedule); setBookedTimes(schedule.filter((time) => !available.includes(time))) }).finally(() => setIsLoadingTimes(false))
-  }, [selectedDate, selectedCategory])
+    const availabilityRequest = selectedStaffId
+      ? getBookedTimes(selectedDate, selectedCategory, selectedStaffId)
+      : Promise.all(staff.map((person) => getBookedTimes(selectedDate, selectedCategory, person.id))).then((results) => Array.from(new Set(results.flat())))
+    Promise.all([availabilityRequest, getAvailableSchedule(selectedCategory, selectedDate)]).then(([available, schedule]) => { setAvailableSchedule(schedule); setBookedTimes(schedule.filter((time) => !available.includes(time))) }).finally(() => setIsLoadingTimes(false))
+  }, [selectedDate, selectedCategory, selectedStaffId, staff])
 
   const bookingCategories = catalog?.map((item) => ({ ...item, treatments: item.treatments.map((treatment) => ({ ...treatment, id: String(treatment.id) })) })) ?? SERVICE_CATEGORIES
   const category = bookingCategories.find((item) => item.name === selectedCategory)
@@ -52,7 +57,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
   }
 
   function toggleTreatment(id: string) {
-    setSelectedTreatments((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id])
+    setSelectedTreatments([id])
   }
 
   function handleSubmit(formData: FormData) {
@@ -63,6 +68,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
     formData.set("service", JSON.stringify({ category: selectedCategory, treatmentIds: selectedTreatments }))
     formData.set("appointmentDate", selectedDate)
     formData.set("appointmentTime", selectedTime)
+    if (selectedStaffId) formData.set("staffId", String(selectedStaffId))
     setMessage(null)
     startTransition(async () => {
       const result = await createAppointment(formData)
@@ -104,6 +110,13 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
         <input id="phone" name="phone" type="tel" required placeholder="Ej. 099 123 456" className={inputClass} />
       </div>
       <fieldset>
+        <legend className="mb-3 text-sm text-foreground">Elegí tu barbero</legend>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <button type="button" onClick={() => setSelectedStaffId(null)} className={`flex min-h-14 items-center gap-3 rounded-lg border p-3 text-left sm:col-span-2 ${selectedStaffId === null ? "border-primary bg-primary/10" : "border-border bg-card"}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Scissors className="size-4" aria-hidden="true" /></span><span><span className="block text-sm text-foreground">Cualquier barbero</span><span className="block text-xs text-muted-foreground">Mostrá todos los horarios disponibles</span></span></button>
+          {staff.map((person) => <button key={person.id} type="button" onClick={() => setSelectedStaffId(person.id)} className={`flex min-h-14 items-center gap-3 rounded-lg border p-3 text-left ${selectedStaffId === person.id ? "border-primary bg-primary/10" : "border-border bg-card"}`}><span className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-xs font-medium">{person.photoUrl ? <img src={person.photoUrl} alt="" className="h-full w-full object-cover" /> : person.name.split(" ").map((part) => part[0]).join("")}</span><span className="text-sm text-foreground">{person.name}</span></button>)}
+        </div>
+      </fieldset>
+      <fieldset>
         <legend className="mb-3 text-sm text-foreground">Elegí una categoría</legend>
         <div className="grid gap-3">
           {bookingCategories.map((item) => {
@@ -116,7 +129,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
                   <span className="flex-1"><span className={`block font-serif text-lg text-foreground ${item.name === "Promos" ? "tracking-wide" : ""}`}>{item.name}</span><span className="block text-xs text-muted-foreground">{item.description}</span></span>
                   <span className={`flex h-5 w-5 items-center justify-center rounded-full border ${active ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{active && <Check className="h-3 w-3" aria-hidden="true" />}</span>
                 </button>
-                <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}><div className="min-h-0 overflow-hidden"><div className="mt-1 rounded-lg border border-primary/25 bg-background/70 p-2" role="group" aria-label={`Tratamientos de ${item.name}`}><div className="mb-1 flex items-center gap-2 text-xs uppercase tracking-wider text-primary"><ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ${active ? "rotate-0" : "-rotate-90"}`} /> Elegí uno o más tratamientos</div><div className="flex flex-col gap-1">{item.treatments.map((treatment) => { const checked = selectedTreatments.includes(treatment.id); const treatmentNote = ("note" in treatment ? treatment.note?.trim() : "") ?? ""; return <label key={treatment.id} className="grid grid-cols-[1rem_minmax(0,1fr)_auto] items-start gap-x-2 gap-y-0 rounded-md px-1 py-0.5 hover:bg-primary/5"><input type="checkbox" checked={checked} onChange={() => toggleTreatment(treatment.id)} className="sr-only" /><span className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded border ${checked ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{checked && <Check className="h-3 w-3" aria-hidden="true" />}</span><span className="group relative min-w-0 flex-1 text-sm text-foreground"><span className="inline"><span>{treatment.name}</span>{treatmentNote && <Info className="ml-1 inline-block size-2.5 -translate-y-0.5 text-primary/75" strokeWidth={2.25} aria-hidden="true" />}</span>{checked && treatmentNote && <span className="col-span-3 mt-0.5 block w-full origin-top animate-in fade-in slide-in-from-top-1 duration-300 text-xs leading-relaxed text-muted-foreground">{treatmentNote}</span>}</span><span className="text-sm tabular-nums text-primary">{treatment.price === null ? "Consultar" : ("promoPrice" in treatment && treatment.promoPrice != null) ? <><span className="mr-1 text-muted-foreground line-through">{formatUYU(treatment.price)}</span>{formatUYU(Number(treatment.promoPrice))}</> : formatUYU(treatment.price)}</span></label> })}</div></div></div></div>
+                <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}><div className="min-h-0 overflow-hidden"><div className="mt-1 rounded-lg border border-primary/25 bg-background/70 p-2" role="group" aria-label={`Tratamientos de ${item.name}`}><div className="mb-1 flex items-center gap-2 text-xs uppercase tracking-wider text-primary"><ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ${active ? "rotate-0" : "-rotate-90"}`} /> Elegí un tratamiento</div><div className="flex flex-col gap-1">{item.treatments.map((treatment) => { const checked = selectedTreatments.includes(treatment.id); const treatmentNote = ("note" in treatment ? treatment.note?.trim() : "") ?? ""; return <label key={treatment.id} className="grid grid-cols-[1rem_minmax(0,1fr)_auto] items-start gap-x-2 gap-y-0 rounded-md px-1 py-0.5 hover:bg-primary/5"><input type="radio" name="treatment" checked={checked} onChange={() => toggleTreatment(treatment.id)} className="sr-only" /><span className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${checked ? "border-primary" : "border-border"}`}>{checked && <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />}</span><span className="group relative min-w-0 flex-1 text-sm text-foreground"><span className="inline"><span>{treatment.name}</span>{treatmentNote && <Info className="ml-1 inline-block size-2.5 -translate-y-0.5 text-primary/75" strokeWidth={2.25} aria-hidden="true" />}</span>{checked && treatmentNote && <span className="col-span-3 mt-0.5 block w-full origin-top animate-in fade-in slide-in-from-top-1 duration-300 text-xs leading-relaxed text-muted-foreground">{treatmentNote}</span>}</span><span className="text-sm tabular-nums text-primary">{treatment.price === null ? "Consultar" : ("promoPrice" in treatment && treatment.promoPrice != null) ? <><span className="mr-1 text-muted-foreground line-through">{formatUYU(treatment.price)}</span>{formatUYU(Number(treatment.promoPrice))}</> : formatUYU(treatment.price)}</span></label> })}</div></div></div></div>
               </div>
             )
           })}
@@ -124,7 +137,7 @@ export function BookingForm({ catalog }: { catalog?: BookingCatalog }) {
         <input type="hidden" name="service" value={selectedCategory ?? ""} />
         {servicePrice > 0 && <p className="mt-3 text-sm text-muted-foreground">Total estimado: <span className="text-foreground">{formatUYU(servicePrice)}</span></p>}
       </fieldset>
-      {selectedCategory && !isOnlineCategory(selectedCategory) ? (
+      {false ? (
         <a href={whatsappUrl(`Hola, quisiera consultar horarios para ${selectedCategory}.`)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 rounded-full bg-whatsapp px-6 py-3.5 text-sm tracking-wide text-whatsapp-foreground transition-opacity hover:opacity-90">
           <MessageCircle className="h-5 w-5" aria-hidden="true" /> CONSULTAR POR HORARIOS A WHATSAPP
         </a>

@@ -24,6 +24,7 @@ export const appointments = pgTable("appointments", {
 export const serviceSchedules = pgTable("service_schedules", {
   id: serial("id").primaryKey(),
   serviceCategory: text("service_category").notNull(),
+  dayOfWeek: integer("day_of_week").notNull().default(1),
   startTime: text("start_time").notNull(),
   endTime: text("end_time").notNull(),
 })
@@ -50,10 +51,23 @@ export const serviceTreatments = pgTable("service_treatments", {
   showOnSite: boolean("show_on_site").notNull().default(true),
 })
 
+export const membershipConfig = pgTable("membership_config", {
+  id: integer("id").primaryKey().default(1),
+  name: text("name").notNull().default("Corte + Fino"),
+  price: integer("price").notNull().default(0),
+  chemicalDiscount: integer("chemical_discount").notNull().default(20),
+  monthlyCuts: integer("monthly_cuts").notNull().default(4),
+  description: text("description").notNull().default("Una forma simple de cuidar tu estilo todo el mes."),
+  active: boolean("active").notNull().default(true),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+})
+
 export const staff = pgTable("staff", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email"),
+  photoUrl: text("photo_url"),
+  instagram: text("instagram"),
   adminAccess: boolean("admin_access").notNull().default(false),
   active: boolean("active").notNull().default(true),
   createdAt: timestamp("created_at").notNull().defaultNow(),

@@ -1,8 +1,7 @@
-import Image from "next/image"
 import { MessageCircle } from "lucide-react"
 import { whatsappUrl } from "@/lib/schedule"
 
-const INSTAGRAM_URL = "https://instagram.com/luma_centroestetico"
+const INSTAGRAM_URL = "https://instagram.com/cortefinoestudio2026"
 
 // lucide-react quitó los íconos de marcas (Instagram, etc.) en versiones recientes,
 // así que usamos el mismo trazado que usan sus íconos como SVG inline.
@@ -27,18 +26,18 @@ function InstagramIcon({ className }: { className?: string }) {
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-secondary/40 py-14">
-      <div className="mx-auto max-w-6xl px-6 text-center">
+    <footer className="border-t border-border bg-secondary/40 py-8 sm:py-10">
+      <div className="mx-auto max-w-6xl px-5 text-center sm:px-6">
         <div className="flex flex-col items-center leading-none">
-          <Image src="/luma-logo.png" alt="LUMA Centro Estético" width={180} height={180} className="h-auto w-36" />
+          <span className="font-serif text-3xl tracking-[0.22em] text-foreground">CORTE FINO</span>
         </div>
-        <p className="mx-auto mt-6 max-w-md text-sm italic leading-relaxed text-muted-foreground">
-          Iluminamos tu belleza, potenciamos tu esencia.
+        <p className="mx-auto mt-3 max-w-md text-sm italic leading-relaxed text-muted-foreground">
+          Tu estilo, bien hecho.
         </p>
-        <p className="mt-6 text-xs tracking-wide text-muted-foreground">
-          San Martín 2825 · Reducto · Montevideo, Uruguay
+        <p className="mt-3 text-xs tracking-wide text-muted-foreground">
+          Santa Catalina · Montevideo, Uruguay
         </p>
-        <div className="mt-4 flex items-center justify-center gap-3">
+        <div className="mt-3 flex items-center justify-center gap-3">
           <a
             href={INSTAGRAM_URL}
             target="_blank"
@@ -58,8 +57,8 @@ export function SiteFooter() {
             <MessageCircle className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
           </a>
         </div>
-        <p className="mt-3 text-xs tracking-wide text-muted-foreground">
-          @luma_centroestetico
+          <p className="mt-2 text-xs tracking-wide text-muted-foreground">
+          @cortefinoestudio2026
         </p>
       </div>
     </footer>

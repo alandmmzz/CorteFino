@@ -10,17 +10,20 @@ import Link from "next/link"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
 import { AdminAccessForm } from "@/components/admin-access-form"
 import { getAdminEmails } from "@/lib/admin-auth"
+import { getMembership } from "@/app/actions/membership"
+import { AdminMembership } from "@/components/admin-membership"
 
 export const dynamic = "force-dynamic"
 
 export default async function AdminPage() {
   if (!(await isAdminAuthenticated())) return <AdminAccessForm />
 
-  const [appointments, serviceCatalog, staffList, scheduleList] = await Promise.all([
+  const [appointments, serviceCatalog, staffList, scheduleList, membership] = await Promise.all([
     getAppointments(),
     getAdminServiceCatalog(),
     getStaff(),
     getServiceSchedules(),
+    getMembership(),
   ])
 
   return (
@@ -32,7 +35,7 @@ export default async function AdminPage() {
               Panel de administración
             </p>
             <h1 className="mt-2 font-serif text-4xl text-foreground">
-              Turnos de LUMA
+              Turnos de Corte Fino
             </h1>
           </div>
           <Link
@@ -44,11 +47,12 @@ export default async function AdminPage() {
         </div>
 
         <AdminTabs
-          turnos={<div className="space-y-10"><AdminCalendar appointments={appointments} catalog={serviceCatalog} /><AdminAppointments appointments={appointments} staff={staffList} catalog={serviceCatalog} /></div>}
+          turnos={<div className="space-y-10"><AdminCalendar appointments={appointments} catalog={serviceCatalog} staff={staffList} /><AdminAppointments appointments={appointments} staff={staffList} catalog={serviceCatalog} /></div>}
           servicios={<AdminServices catalog={serviceCatalog} />}
           personal={<AdminStaff staff={staffList} adminEmails={getAdminEmails()} />}
           horarios={<AdminSchedules schedules={scheduleList} catalog={serviceCatalog} />}
           stories={<AdminStories catalog={serviceCatalog} />}
+          membresia={<AdminMembership membership={membership} />}
         />
       </div>
     </main>

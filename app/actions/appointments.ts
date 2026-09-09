@@ -27,8 +27,10 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   const service = String(formData.get("service") ?? "").trim()
   const appointmentDate = String(formData.get("appointmentDate") ?? "").trim()
   const appointmentTime = String(formData.get("appointmentTime") ?? "").trim()
+  const staffIdValue = String(formData.get("staffId") ?? "").trim()
+  const staffId = staffIdValue ? Number(staffIdValue) : null
 
-  if (!name || !phone || !service || !appointmentDate || !appointmentTime) {
+  if (!name || !phone || !service || !appointmentDate || !appointmentTime || (staffId !== null && !Number.isInteger(staffId))) {
     return { ok: false, error: "Por favor completá todos los campos." }
   }
 
@@ -39,9 +41,11 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     return { ok: false, error: "Seleccioná un tratamiento válido." }
   }
   const catalog = await getAllServiceCatalog()
+  const activeStaff = await db.select({ id: staff.id }).from(staff).where(eq(staff.active, true))
+  if (staffId !== null && !activeStaff.some((person) => person.id === staffId)) return { ok: false, error: "Seleccioná un barbero válido." }
   const category = catalog.find((item) => item.name === selection.category)
   if (!isOnlineCategory(selection.category)) {
-    return { ok: false, error: "Esta categoría se coordina por WhatsApp." }
+    return { ok: false, error: "Seleccioná Barbería." }
   }
   const validIds = new Set(category?.treatments.map((treatment) => String(treatment.id)) ?? [])
   if (!category || !Array.isArray(selection.treatmentIds) || selection.treatmentIds.length === 0 || selection.treatmentIds.some((id) => !validIds.has(String(id)))) {
@@ -55,31 +59,34 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
     return { ok: false, error: "Elegí una fecha válida a partir de hoy." }
   }
 
-  const allowedTimes = getScheduleForCategory(selection.category)
+  const allowedTimes = await getAvailableSchedule(selection.category, appointmentDate)
   if (!allowedTimes.includes(appointmentTime)) {
     return { ok: false, error: "Elegí un horario disponible para esta categoría." }
   }
 
-  const existingAtTime = await db
-    .select({ id: appointments.id, service: appointments.service, appointmentTime: appointments.appointmentTime })
-    .from(appointments)
-    .where(
-      and(
-        eq(appointments.appointmentDate, appointmentDate),
-        ne(appointments.status, "cancelado"),
-      ),
-    )
-  const booked = existingAtTime.map((item) => {
-    const bookedCategory = getAppointmentCategory(item.service)
-    return { category: bookedCategory, time: item.appointmentTime, durationMinutes: catalog.find((item) => item.name === bookedCategory)?.durationMinutes ?? 90 }
-  })
-  if (!isTimeAvailable(selection.category, appointmentTime, booked, category.durationMinutes)) {
-    return { ok: false, error: "Ese horario se superpone con otro turno o supera la capacidad disponible." }
+  const candidateStaffIds = staffId !== null ? [staffId] : activeStaff.map((person) => person.id)
+  if (candidateStaffIds.length === 0) return { ok: false, error: "No hay barberos disponibles para ese horario." }
+  let assignedStaffId: number | null = staffId
+  for (const candidateStaffId of candidateStaffIds) {
+    const existingAtTime = await db
+      .select({ id: appointments.id, service: appointments.service, appointmentTime: appointments.appointmentTime })
+      .from(appointments)
+      .where(and(eq(appointments.appointmentDate, appointmentDate), eq(appointments.staffId, candidateStaffId), ne(appointments.status, "cancelado")))
+    const booked = existingAtTime.map((item) => {
+      const bookedCategory = getAppointmentCategory(item.service)
+      return { category: bookedCategory, time: item.appointmentTime, durationMinutes: 30 }
+    })
+    if (isTimeAvailable(selection.category, appointmentTime, booked, category.durationMinutes)) {
+      assignedStaffId = candidateStaffId
+      break
+    }
+    if (staffId !== null) return { ok: false, error: "Ese horario se superpone con otro turno o supera la capacidad disponible." }
   }
+  if (assignedStaffId === null) return { ok: false, error: "Ese horario no está disponible con ninguno de nuestros barberos." }
 
   const price = catalogPrice(service, catalog)
   if (price <= 0) {
-    return { ok: false, error: "Para Depilación, consultá el precio antes de reservar." }
+    return { ok: false, error: "El tratamiento seleccionado no tiene un precio válido." }
   }
 
   const [row] = await db
@@ -91,6 +98,7 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
       service,
       appointmentDate,
       appointmentTime,
+      staffId: assignedStaffId,
       price,
     })
     .returning({ id: appointments.id })
@@ -113,21 +121,32 @@ export async function createAppointment(formData: FormData): Promise<BookingResu
   return { ok: true, id: row.id }
 }
 
-export async function getAvailableSchedule(category: string) {
+export async function getAvailableSchedule(category: string, date?: string) {
   const rows = await getServiceSchedules()
-  return rows.filter((row) => row.serviceCategory === category).map((row) => row.startTime)
+  const weekday = date ? new Date(`${date}T12:00:00`).getDay() : null
+  if (weekday === 0) return []
+  const dayOfWeek = weekday ?? 1
+  const dayRows = rows.filter((row) => row.serviceCategory === category && row.dayOfWeek === dayOfWeek)
+  const sourceRows = dayRows.length ? dayRows : rows.filter((row) => row.serviceCategory === category && row.dayOfWeek === 1)
+  const closingMinutes = dayOfWeek === 6 ? 18 * 60 : 20 * 60
+  return sourceRows.map((row) => row.startTime).filter((time) => {
+    const [hours, minutes] = time.split(":").map(Number)
+    const totalMinutes = hours * 60 + minutes
+    return totalMinutes >= 10 * 60 && totalMinutes < closingMinutes
+  })
 }
 
 export async function getServiceSchedules() {
   const rows = await db.select().from(serviceSchedules).orderBy(asc(serviceSchedules.serviceCategory), asc(serviceSchedules.startTime))
   if (rows.length) return rows
-  return Object.entries({ Nails: ["09:00", "13:00", "16:00", "19:00"], "Pedicuría": ["09:00", "13:00", "16:00", "19:00"], "Cosmetología": ["09:00", "10:30", "12:00", "13:30", "15:00", "16:30", "18:00"], Promos: ["09:00", "11:30", "14:00", "16:30"] }).flatMap(([serviceCategory, times]) => times.map((startTime) => ({ id: 0, serviceCategory, startTime, endTime: startTime })))
+  return getScheduleForCategory("Barbería").map((startTime) => ({ id: 0, serviceCategory: "Barbería", dayOfWeek: 1, startTime, endTime: startTime }))
 }
 
-export async function updateServiceSchedules(serviceCategory: string, times: string[]) {
+export async function updateServiceSchedules(serviceCategory: string, dayOfWeek: number, times: string[]) {
+  const validDay = Number.isInteger(dayOfWeek) && dayOfWeek >= 1 && dayOfWeek <= 6 ? dayOfWeek : 1
   const valid = times.filter((time) => /^([01]\\d|2[0-3]):[0-5]\\d$/.test(time)).sort()
-  await db.delete(serviceSchedules).where(eq(serviceSchedules.serviceCategory, serviceCategory))
-  if (valid.length) await db.insert(serviceSchedules).values(valid.map((startTime) => ({ serviceCategory, startTime, endTime: startTime })))
+  await db.delete(serviceSchedules).where(and(eq(serviceSchedules.serviceCategory, serviceCategory), eq(serviceSchedules.dayOfWeek, validDay)))
+  if (valid.length) await db.insert(serviceSchedules).values(valid.map((startTime) => ({ serviceCategory, dayOfWeek: validDay, startTime, endTime: startTime })))
   revalidatePath("/admin")
   revalidatePath("/")
   return { ok: true }
@@ -141,10 +160,19 @@ export async function getStaff() {
   return db.select().from(staff).where(eq(staff.active, true)).orderBy(asc(staff.name))
 }
 
-export async function createStaff(name: string, email?: string, adminAccess = false) {
+export async function createStaff(name: string, email?: string, adminAccess = false, photoUrl?: string, instagram?: string) {
   if (!name.trim()) return { ok: false, error: "Ingresá un nombre." }
-  await db.insert(staff).values({ name: name.trim(), email: email?.trim() || null, adminAccess })
+  await db.insert(staff).values({ name: name.trim(), email: email?.trim() || null, adminAccess, photoUrl: photoUrl?.trim() || null, instagram: instagram?.trim() || null })
   revalidatePath("/admin")
+  return { ok: true }
+}
+
+export async function updateStaff(id: number, data: { name: string; email?: string; instagram?: string; photoUrl?: string }) {
+  if (!data.name.trim()) return { ok: false, error: "Ingresá un nombre." }
+  await db.update(staff).set({ name: data.name.trim(), email: data.email?.trim() || null, instagram: data.instagram?.trim() || null, photoUrl: data.photoUrl?.trim() || null }).where(eq(staff.id, id))
+  revalidatePath("/admin")
+  revalidatePath("/")
+  revalidatePath("/reservar")
   return { ok: true }
 }
 
@@ -250,7 +278,7 @@ function emailLayout(options: { preheader: string; eyebrow: string; heading: str
                 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:18px auto 0 auto;">
                   <tr>
                     <td style="padding:0 12px;border-right:1px solid #dfd1bd;">
-                      <a href="https://instagram.com/luma_centroestetico" style="color:#8a6b43;font-family:Arial,sans-serif;font-size:11px;text-decoration:none;">Instagram</a>
+                      <a href="https://instagram.com/cortefinoestudio2026" style="color:#8a6b43;font-family:Arial,sans-serif;font-size:11px;text-decoration:none;">Instagram</a>
                     </td>
                     <td style="padding:0 12px;">
                       <a href="${WHATSAPP_EMAIL_URL}" style="color:#8a6b43;font-family:Arial,sans-serif;font-size:11px;text-decoration:none;">WhatsApp</a>
@@ -484,7 +512,7 @@ export async function getWeeklyAvailability(category: string) {
   return Promise.all(days.map(async (day) => ({ ...day, times: await getBookedTimes(day.date, category) })))
 }
 
-export async function getBookedTimes(appointmentDate: string, category?: string) {
+export async function getBookedTimes(appointmentDate: string, category?: string, staffId?: number) {
   const catalog = await getAllServiceCatalog()
   const rows = await db
     .select({ appointmentTime: appointments.appointmentTime, service: appointments.service })
@@ -492,6 +520,7 @@ export async function getBookedTimes(appointmentDate: string, category?: string)
     .where(
       and(
         eq(appointments.appointmentDate, appointmentDate),
+        ...(staffId ? [eq(appointments.staffId, staffId)] : []),
         ne(appointments.status, "cancelado"),
       ),
     )
