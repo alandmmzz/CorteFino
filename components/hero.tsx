@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { ArrowRight, Check, MapPin, Sparkles } from "lucide-react"
+import { ArrowRight, Check, MapPin } from "lucide-react"
 
 export function Hero() {
   return (
@@ -7,10 +7,9 @@ export function Hero() {
       <div className="mx-auto grid min-h-[calc(100svh-5rem)] max-w-[1600px] lg:grid-cols-[0.95fr_1.05fr]">
         <div className="flex flex-col justify-center px-6 py-20 sm:px-10 lg:px-16 xl:px-20">
           <div className="mb-8 flex flex-wrap gap-3">
-            <p className="inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 bg-foreground/[0.06] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-foreground/80 shadow-[0_0_24px_oklch(0.9_0_0/0.08)]">
+            <p className="location-badge inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 bg-foreground/[0.06] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-foreground/80">
               <MapPin aria-hidden="true" className="size-3.5" /> Santa Catalina · Montevideo
             </p>
-            <span className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-foreground/60"><Sparkles aria-hidden="true" className="size-3.5" /> Atención personalizada</span>
           </div>
           <h1 className="max-w-3xl font-serif text-6xl leading-[0.9] tracking-[-0.035em] text-balance sm:text-7xl xl:text-8xl">
             Tu estilo, <span className="text-foreground/80">tu sello.</span>
