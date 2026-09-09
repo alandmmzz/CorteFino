@@ -173,6 +173,36 @@
   }
 }
 
+.hero-glow::before,
+.hero-glow::after {
+  border-radius: 9999px;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+}
+
+.hero-glow::before {
+  background: oklch(0.9 0 0 / 0.08);
+  filter: blur(90px);
+  height: 18rem;
+  right: 28%;
+  top: 8%;
+  width: 18rem;
+}
+
+.hero-glow::after {
+  background: oklch(0.48 0.12 250 / 0.14);
+  filter: blur(110px);
+  height: 22rem;
+  right: 4%;
+  top: 36%;
+  width: 22rem;
+}
+
+.hero-button-glow {
+  box-shadow: 0 0 28px oklch(0.9 0 0 / 0.16), 0 12px 32px oklch(0 0 0 / 0.28);
+}
+
 .membership-premium::before {
   background: linear-gradient(125deg, transparent 8%, oklch(0.72 0.14 78 / 0.08) 34%, oklch(0.9 0.13 88 / 0.18) 48%, transparent 70%);
   content: "";
