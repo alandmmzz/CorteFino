@@ -14,9 +14,6 @@ export function Hero() {
           <h1 className="max-w-3xl font-serif text-5xl leading-[0.9] tracking-[-0.035em] text-balance sm:text-6xl xl:text-7xl">
             Tu estilo, <span className="text-foreground/80">tu sello.</span>
           </h1>
-          <h2 className="mt-7 max-w-2xl text-2xl font-semibold leading-[1.05] text-balance sm:text-3xl xl:text-4xl">
-            Barbería de precisión en Santa Catalina.
-          </h2>
           <p className="mt-6 max-w-xl text-sm leading-6 text-foreground/70 sm:text-base">
             Elegí tu servicio, tu barbero y tu horario. Una experiencia cuidada para que salgas sintiéndote tan bien como te ves.
           </p>
