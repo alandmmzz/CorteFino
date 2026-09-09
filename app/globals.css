@@ -231,13 +231,8 @@
 }
 
 .location-badge {
-  background:
-    linear-gradient(90deg, oklch(0.62 0.2 25 / 0.16), oklch(0.96 0 0 / 0.1) 48%, oklch(0.48 0.12 250 / 0.2)),
-    oklch(0.18 0 0 / 0.72);
-  box-shadow:
-    0 0 24px oklch(0.62 0.2 25 / 0.42),
-    0 0 34px oklch(0.96 0 0 / 0.18),
-    0 0 42px oklch(0.48 0.12 250 / 0.42);
+  background: oklch(0.18 0 0 / 0.72);
+  box-shadow: none;
 }
 
 .hero-button-glow {
