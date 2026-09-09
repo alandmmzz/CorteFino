@@ -33,6 +33,7 @@ export default async function HomePage() {
       <Barbers staff={staff} />
       <div className="barber-stripe h-3" aria-hidden="true" />
       <Membership membership={membership} />
+      <div className="barber-stripe h-3" aria-hidden="true" />
       <Services catalog={catalog} />
       <div className="barber-stripe h-3" aria-hidden="true" />
       <BookingSection />
