@@ -23,10 +23,9 @@ export function Membership({ membership }: { membership: Membership }) {
           <span className="h-px flex-1 bg-foreground/15" />
         </div>
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
-          <div>
-            <p className="text-xs uppercase tracking-[0.35em] membership-gold-text">La membresía de la casa</p>
-            <h2 className="membership-metal mt-4 max-w-xl font-serif text-6xl font-bold leading-[0.86] tracking-[-0.04em] text-balance sm:text-8xl">{membership.name}</h2>
-            <p className="mt-6 max-w-md text-base leading-7 text-foreground/70">{membership.description}</p>
+          <div className="text-center lg:text-left">
+            <h2 className="membership-metal mt-4 max-w-xl font-serif text-6xl font-bold leading-[0.86] tracking-[-0.04em] text-balance sm:text-8xl lg:mx-0 mx-auto">{membership.name}</h2>
+            <p className="mt-6 max-w-md text-base leading-7 text-foreground/70 lg:mx-0 mx-auto">{membership.description}</p>
             <p className="mt-5 font-serif text-2xl font-semibold text-foreground">{membership.price ? `$${membership.price.toLocaleString("es-AR")}` : "A consultar"}<span className="ml-2 font-sans text-sm font-normal text-foreground/60">por mes</span></p>
           </div>
           <div className="border border-foreground/15 bg-foreground/[0.03] p-6 sm:p-8">
@@ -39,7 +38,7 @@ export function Membership({ membership }: { membership: Membership }) {
                 </div>
               ))}
             </div>
-            <Link href="/reservar" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full membership-gold-button rounded-full px-6 py-3 text-base font-bold shadow-lg transition-transform hover:-translate-y-0.5">Quiero mi membresía VIP</Link>
+            <Link href="/reservar" className="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-full membership-gold-button px-6 py-3 text-base font-bold shadow-lg transition-transform hover:-translate-y-0.5">Quiero mi membresía VIP</Link>
           </div>
         </div>
       </div>
