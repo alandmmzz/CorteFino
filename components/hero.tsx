@@ -5,7 +5,7 @@ export function Hero() {
   return (
     <section className="hero-glow relative overflow-hidden bg-background text-foreground">
       <div className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1600px] lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-12 lg:pb-8 lg:pt-20 xl:px-16">
+        <div className="flex flex-col justify-center px-6 pb-12 pt-24 sm:px-10 lg:px-12 lg:pb-8 lg:pt-20 xl:px-16">
           <div className="mb-5 flex flex-wrap gap-3">
             <p className="location-badge inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 bg-foreground/[0.06] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-foreground/80">
               <MapPin aria-hidden="true" className="size-3.5" /> Santa Catalina · Montevideo
