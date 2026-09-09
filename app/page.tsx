@@ -30,13 +30,13 @@ export default async function HomePage() {
       <SiteHeader />
       <Hero />
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <Barbers staff={staff} />
+      <div className="show-up show-up-1"><Barbers staff={staff} /></div>
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <Membership membership={membership} />
+      <div className="show-up show-up-2"><Membership membership={membership} /></div>
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <Services catalog={catalog} />
+      <div className="show-up show-up-3"><Services catalog={catalog} /></div>
       <div className="barber-stripe h-3" aria-hidden="true" />
-      <BookingSection />
+      <div className="show-up show-up-4"><BookingSection /></div>
       <SiteFooter />
       <WhatsAppFloat />
     </main>
