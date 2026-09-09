@@ -24,6 +24,7 @@ export const appointments = pgTable("appointments", {
 export const serviceSchedules = pgTable("service_schedules", {
   id: serial("id").primaryKey(),
   serviceCategory: text("service_category").notNull(),
+  dayOfWeek: integer("day_of_week").notNull().default(1),
   startTime: text("start_time").notNull(),
   endTime: text("end_time").notNull(),
 })

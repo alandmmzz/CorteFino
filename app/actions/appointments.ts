@@ -125,28 +125,28 @@ export async function getAvailableSchedule(category: string, date?: string) {
   const rows = await getServiceSchedules()
   const weekday = date ? new Date(`${date}T12:00:00`).getDay() : null
   if (weekday === 0) return []
-  const saturday = weekday === 6
-  const closingMinutes = saturday ? 18 * 60 : 20 * 60
-  return rows
-    .filter((row) => row.serviceCategory === category)
-    .map((row) => row.startTime)
-    .filter((time) => {
-      const [hours, minutes] = time.split(":").map(Number)
-      const totalMinutes = hours * 60 + minutes
-      return totalMinutes >= 10 * 60 && totalMinutes < closingMinutes
-    })
+  const dayOfWeek = weekday ?? 1
+  const dayRows = rows.filter((row) => row.serviceCategory === category && row.dayOfWeek === dayOfWeek)
+  const sourceRows = dayRows.length ? dayRows : rows.filter((row) => row.serviceCategory === category && row.dayOfWeek === 1)
+  const closingMinutes = dayOfWeek === 6 ? 18 * 60 : 20 * 60
+  return sourceRows.map((row) => row.startTime).filter((time) => {
+    const [hours, minutes] = time.split(":").map(Number)
+    const totalMinutes = hours * 60 + minutes
+    return totalMinutes >= 10 * 60 && totalMinutes < closingMinutes
+  })
 }
 
 export async function getServiceSchedules() {
   const rows = await db.select().from(serviceSchedules).orderBy(asc(serviceSchedules.serviceCategory), asc(serviceSchedules.startTime))
   if (rows.length) return rows
-  return getScheduleForCategory("Barbería").map((startTime) => ({ id: 0, serviceCategory: "Barbería", startTime, endTime: startTime }))
+  return getScheduleForCategory("Barbería").map((startTime) => ({ id: 0, serviceCategory: "Barbería", dayOfWeek: 1, startTime, endTime: startTime }))
 }
 
-export async function updateServiceSchedules(serviceCategory: string, times: string[]) {
+export async function updateServiceSchedules(serviceCategory: string, dayOfWeek: number, times: string[]) {
+  const validDay = Number.isInteger(dayOfWeek) && dayOfWeek >= 1 && dayOfWeek <= 6 ? dayOfWeek : 1
   const valid = times.filter((time) => /^([01]\\d|2[0-3]):[0-5]\\d$/.test(time)).sort()
-  await db.delete(serviceSchedules).where(eq(serviceSchedules.serviceCategory, serviceCategory))
-  if (valid.length) await db.insert(serviceSchedules).values(valid.map((startTime) => ({ serviceCategory, startTime, endTime: startTime })))
+  await db.delete(serviceSchedules).where(and(eq(serviceSchedules.serviceCategory, serviceCategory), eq(serviceSchedules.dayOfWeek, validDay)))
+  if (valid.length) await db.insert(serviceSchedules).values(valid.map((startTime) => ({ serviceCategory, dayOfWeek: validDay, startTime, endTime: startTime })))
   revalidatePath("/admin")
   revalidatePath("/")
   return { ok: true }
