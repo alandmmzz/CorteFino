@@ -70,7 +70,8 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
     const carousel = carouselRef.current
     if (!carousel) return
     const card = carousel.children[activePage * cardsPerPage] as HTMLElement | undefined
-    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    if (!card) return
+    carousel.scrollTo({ left: card.offsetLeft, behavior: "smooth" })
   }, [activePage, cardsPerPage])
 
   const goToPage = (page: number) => setActivePage(Math.max(0, Math.min(page, pageCount - 1)))
@@ -104,8 +105,8 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
             )
           })}
         </div>
-        <button type="button" onClick={previousPage} aria-label="Tratamientos anteriores" className="absolute left-2 top-1/2 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/90 p-2 text-foreground transition-colors hover:border-primary hover:text-primary md:block"><ArrowLeft aria-hidden="true" className="size-4" /></button>
-        <button type="button" onClick={nextPage} aria-label="Siguientes tratamientos" className="absolute right-2 top-1/2 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/90 p-2 text-foreground transition-colors hover:border-primary hover:text-primary md:block"><ArrowRight aria-hidden="true" className="size-4" /></button>
+        <button type="button" onClick={previousPage} aria-label="Tratamientos anteriores" className="absolute left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary hover:text-primary md:block"><ArrowLeft aria-hidden="true" className="size-4" /></button>
+        <button type="button" onClick={nextPage} aria-label="Siguientes tratamientos" className="absolute right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border border-foreground/20 bg-background/95 p-2 text-foreground shadow-lg transition-colors hover:border-primary hover:text-primary md:block"><ArrowRight aria-hidden="true" className="size-4" /></button>
         </div>
         <div className="mt-7 flex justify-center gap-2" aria-label={`Página ${activePage + 1} de ${pageCount}`}>
           {Array.from({ length: pageCount }, (_, page) => (
