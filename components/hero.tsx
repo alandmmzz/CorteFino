@@ -17,9 +17,6 @@ export function Hero() {
           <h2 className="mt-5 max-w-2xl text-2xl font-semibold leading-[1.05] text-balance sm:text-3xl xl:text-4xl">
             Barbería de precisión en Santa Catalina.
           </h2>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-foreground/70 sm:text-base">
-            Elegí tu servicio, tu barbero y tu horario. Una experiencia cuidada para que salgas sintiéndote tan bien como te ves.
-          </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/reservar" className="hero-button-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5">
               Reservá ya <ArrowRight aria-hidden="true" className="size-4" />
