@@ -4,23 +4,23 @@ import { ArrowRight, Check, MapPin } from "lucide-react"
 export function Hero() {
   return (
     <section className="hero-glow relative overflow-hidden bg-background text-foreground">
-      <div className="mx-auto grid min-h-[calc(100svh-5rem)] max-w-[1600px] lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="flex flex-col justify-center px-6 py-20 sm:px-10 lg:px-16 xl:px-20">
-          <div className="mb-8 flex flex-wrap gap-3">
+      <div className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1600px] lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-12 lg:pb-8 lg:pt-20 xl:px-16">
+          <div className="mb-5 flex flex-wrap gap-3">
             <p className="location-badge inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 bg-foreground/[0.06] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-foreground/80">
               <MapPin aria-hidden="true" className="size-3.5" /> Santa Catalina · Montevideo
             </p>
           </div>
-          <h1 className="max-w-3xl font-serif text-6xl leading-[0.9] tracking-[-0.035em] text-balance sm:text-7xl xl:text-8xl">
+          <h1 className="max-w-3xl font-serif text-5xl leading-[0.9] tracking-[-0.035em] text-balance sm:text-6xl xl:text-7xl">
             Tu estilo, <span className="text-foreground/80">tu sello.</span>
           </h1>
-          <h2 className="mt-8 max-w-2xl text-3xl font-semibold leading-[1.05] text-balance sm:text-4xl xl:text-5xl">
+          <h2 className="mt-5 max-w-2xl text-2xl font-semibold leading-[1.05] text-balance sm:text-3xl xl:text-4xl">
             Barbería de precisión en Santa Catalina.
           </h2>
-          <p className="mt-7 max-w-xl text-base leading-7 text-foreground/70 sm:text-lg">
+          <p className="mt-4 max-w-xl text-sm leading-6 text-foreground/70 sm:text-base">
             Elegí tu servicio, tu barbero y tu horario. Una experiencia cuidada para que salgas sintiéndote tan bien como te ves.
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
             <a href="/reservar" className="hero-button-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5">
               Reservá ya <ArrowRight aria-hidden="true" className="size-4" />
             </a>
@@ -28,7 +28,7 @@ export function Hero() {
               Ver barberos
             </a>
           </div>
-          <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs text-foreground/60" aria-label="Beneficios de Corte Fino">
+          <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-2 text-xs text-foreground/60" aria-label="Beneficios de Corte Fino">
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Agenda online</li>
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Atención personalizada</li>
             <li className="inline-flex items-center gap-2 rounded-full border border-foreground/15 bg-foreground/[0.04] px-3 py-2"><Check aria-hidden="true" className="size-3.5 text-foreground/80" /> Profesionales calificados</li>
