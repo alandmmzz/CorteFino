@@ -15,7 +15,7 @@ export function Membership({ membership }: { membership: Membership }) {
   ]
 
   return (
-    <section className="membership-premium relative overflow-hidden bg-background px-5 py-12 text-foreground sm:px-8 sm:py-16 lg:px-12 xl:px-16">
+    <section className="membership-premium relative overflow-hidden bg-background px-5 py-12 text-foreground sm:px-8 sm:py-16 md:px-10 md:py-12 lg:px-12 xl:px-16">
       <div className="relative mx-auto max-w-7xl">
         <div className="mb-6 flex items-center gap-4">
           <span className="h-px flex-1 bg-foreground/15" />
@@ -24,7 +24,7 @@ export function Membership({ membership }: { membership: Membership }) {
         </div>
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
           <div className="text-center lg:text-left">
-            <h2 className="membership-metal max-w-xl font-serif text-5xl font-bold leading-[0.88] tracking-[-0.035em] text-balance sm:text-8xl lg:mx-0 mx-auto">{membership.name}</h2>
+            <h2 className="membership-metal mx-auto max-w-xl font-serif text-5xl font-bold leading-[0.9] tracking-[-0.035em] text-balance sm:text-6xl md:text-7xl lg:mx-0">{membership.name}</h2>
             <p className="mt-6 max-w-md text-base leading-7 text-foreground/70 lg:mx-0 mx-auto">{membership.description}</p>
             <p className="mt-5 font-serif text-2xl font-semibold text-foreground">{membership.price ? `$${membership.price.toLocaleString("es-AR")}` : "A consultar"}<span className="ml-2 font-sans text-sm font-normal text-foreground/60">por mes</span></p>
           </div>
@@ -32,9 +32,9 @@ export function Membership({ membership }: { membership: Membership }) {
             <p className="font-serif text-2xl font-semibold text-foreground">Incluye:</p>
             <div className="mt-4 grid gap-2">
               {benefits.map((benefit) => (
-                <div key={benefit} className="flex min-h-14 items-center gap-3 rounded-xl membership-gold-card border bg-background px-4 py-3 shadow-sm sm:px-5">
+                <div key={benefit} className="flex min-h-12 items-center gap-3 rounded-xl membership-gold-card border bg-background px-4 py-2.5 shadow-sm sm:px-4 md:min-h-11">
                   <Check aria-hidden="true" className="size-5 shrink-0 membership-gold-text" strokeWidth={2.5} />
-                  <span className="text-base leading-6 text-foreground sm:text-lg">{benefit}</span>
+                  <span className="text-sm leading-5 text-foreground sm:text-base">{benefit}</span>
                 </div>
               ))}
             </div>
