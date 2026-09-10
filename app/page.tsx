@@ -30,14 +30,10 @@ export default async function HomePage() {
     <main className="min-h-screen bg-background text-foreground">
       <SiteHeader />
       <Hero />
-      <div className="barber-stripe h-3" aria-hidden="true" />
-      <ScrollReveal delay={40}><Barbers staff={staff} /></ScrollReveal>
-      <div className="barber-stripe h-3" aria-hidden="true" />
-      <ScrollReveal delay={80}><Membership membership={membership} /></ScrollReveal>
-      <div className="barber-stripe h-3" aria-hidden="true" />
-      <ScrollReveal delay={120}><Services catalog={catalog} /></ScrollReveal>
-      <div className="barber-stripe h-3" aria-hidden="true" />
-      <ScrollReveal delay={160}><BookingSection /></ScrollReveal>
+      <div className="snap-section"><ScrollReveal delay={40}><Barbers staff={staff} /></ScrollReveal><div className="barber-stripe h-3" aria-hidden="true" /></div>
+      <div className="snap-section"><ScrollReveal delay={80}><Membership membership={membership} /></ScrollReveal><div className="barber-stripe h-3" aria-hidden="true" /></div>
+      <div className="snap-section"><ScrollReveal delay={120}><Services catalog={catalog} /></ScrollReveal><div className="barber-stripe h-3" aria-hidden="true" /></div>
+      <div className="snap-section"><ScrollReveal delay={160}><BookingSection /></ScrollReveal></div>
       <SiteFooter />
       <WhatsAppFloat />
     </main>
