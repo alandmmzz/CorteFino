@@ -15,8 +15,8 @@ export function BookingSection() {
           <p className="mt-6 max-w-lg leading-relaxed text-muted-foreground">
             Elegí tu servicio, tu barbero y el horario que mejor te quede. Nos encargamos del resto.
           </p>
-          <Link href="/reservar" className="mt-8 inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-3 text-xs font-medium uppercase tracking-[0.16em] text-background transition-transform hover:-translate-y-0.5">
-            Reservá tu momento <ArrowRight className="h-4 w-4" />
+          <Link href="/reservar" className="soft-lights mt-8 inline-flex items-center gap-3 rounded-full bg-foreground px-7 py-3 text-xs font-medium uppercase tracking-[0.16em] text-background transition-transform hover:-translate-y-0.5">
+            Asegurá tu lugar <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">

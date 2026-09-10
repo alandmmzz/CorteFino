@@ -43,7 +43,7 @@ export function SiteHeader() {
           href={isBookingPage ? "/" : "/reservar"}
           className="rounded-full bg-primary px-3.5 py-2 text-[0.65rem] font-medium tracking-[0.16em] text-primary-foreground transition-opacity hover:opacity-90 sm:px-5"
         >
-          {isBookingPage ? "INICIO" : "ASEGURÁ TU LUGAR"}
+          {isBookingPage ? "INICIO" : "RESERVÁ YA"}
         </Link>
       </div>
     </header>
