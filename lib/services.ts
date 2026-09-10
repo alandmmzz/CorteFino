@@ -16,7 +16,7 @@ export const SERVICE_CATEGORIES = [{
 export const SERVICES = SERVICE_CATEGORIES.map((category) => ({ name: category.name, price: category.treatments.reduce((total, treatment) => total + (treatment.price ?? 0), 0) }))
 export const SERVICE_NAMES = SERVICE_CATEGORIES.map((category) => category.name)
 export const DEPOSIT_OPTIONS = [30, 50, 80, 100] as const
-export const DEPOSIT_ENABLED = process.env.NEXT_PUBLIC_DEPOSIT_ENABLED !== "false"
+export const DEPOSIT_ENABLED = process.env.NEXT_PUBLIC_DEPOSIT_ENABLED === "true"
 
 export function getServicePrice(service: string): number {
   try { const selected = JSON.parse(service) as { category?: string; treatmentIds?: string[] }; const category = SERVICE_CATEGORIES.find((item) => item.name === selected.category); return category?.treatments.filter((treatment) => selected.treatmentIds?.includes(treatment.id)).reduce((total, treatment) => total + (treatment.price ?? 0), 0) ?? 0 } catch { return 0 }
