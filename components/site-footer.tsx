@@ -30,8 +30,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-5 text-center sm:px-6">
         <div className="flex justify-center">
           <img
-            src="/corte-fino-footer-logo.png"
-            alt="Corte Fino Studio — barbería"
+            src="/corte-fino-logo.png"
+            alt="Corte Fino Studio"
             className="h-auto w-56 sm:w-72"
           />
         </div>
