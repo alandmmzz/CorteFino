@@ -30,6 +30,7 @@ function getTreatmentImage(treatment: { id: string; name: string }) {
 
 export function Services({ catalog = services }: { catalog?: PublicService[] } = {}) {
   const carouselRef = useRef<HTMLDivElement>(null)
+  const settleTimeoutRef = useRef<number>()
   const [activePage, setActivePage] = useState(0)
   const [cardsPerPage, setCardsPerPage] = useState(1)
   const treatments = catalog.flatMap((service) => service.treatments.map((treatment, index) => ({ service, treatment, index })))
@@ -55,13 +56,24 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
     return () => window.clearInterval(timer)
   }, [pageCount])
 
+  // Drives the carousel toward whichever page is active (button, dot, or autoplay).
   useEffect(() => {
     const carousel = carouselRef.current
     if (!carousel) return
-    let frame = 0
-    const syncActivePageWithScroll = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
+    const targetCard = carousel.children[activePage * cardsPerPage] as HTMLElement | undefined
+    if (!targetCard) return
+    if (Math.abs(carousel.scrollLeft - targetCard.offsetLeft) < 2) return
+    carousel.scrollTo({ left: targetCard.offsetLeft, behavior: "smooth" })
+  }, [activePage, cardsPerPage])
+
+  // Only reads the scroll position once it settles, so it never fights the
+  // programmatic scroll above mid-animation (which was causing the freeze).
+  useEffect(() => {
+    const carousel = carouselRef.current
+    if (!carousel) return
+    const handleScroll = () => {
+      window.clearTimeout(settleTimeoutRef.current)
+      settleTimeoutRef.current = window.setTimeout(() => {
         const children = Array.from(carousel.children) as HTMLElement[]
         if (children.length === 0) return
         let closestIndex = 0
@@ -74,28 +86,18 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
           }
         })
         const page = Math.min(pageCount - 1, Math.round(closestIndex / cardsPerPage))
-        setActivePage(page)
-      })
+        setActivePage((current) => (current === page ? current : page))
+      }, 120)
     }
-    carousel.addEventListener("scroll", syncActivePageWithScroll, { passive: true })
+    carousel.addEventListener("scroll", handleScroll, { passive: true })
     return () => {
-      carousel.removeEventListener("scroll", syncActivePageWithScroll)
-      cancelAnimationFrame(frame)
+      carousel.removeEventListener("scroll", handleScroll)
+      window.clearTimeout(settleTimeoutRef.current)
     }
   }, [cardsPerPage, pageCount])
 
-  useEffect(() => {
-    const carousel = carouselRef.current
-    if (!carousel) return
-    const firstCard = carousel.children[activePage * cardsPerPage] as HTMLElement | undefined
-    if (!firstCard) return
-    if (Math.abs(carousel.scrollLeft - firstCard.offsetLeft) < 2) return
-    carousel.scrollTo({ left: firstCard.offsetLeft, behavior: "smooth" })
-  }, [activePage, cardsPerPage])
-
   const goToPage = (page: number) => {
-    const nextPageIndex = Math.max(0, Math.min(page, pageCount - 1))
-    setActivePage(nextPageIndex)
+    setActivePage(Math.max(0, Math.min(page, pageCount - 1)))
   }
   const previousPage = () => goToPage(activePage === 0 ? pageCount - 1 : activePage - 1)
   const nextPage = () => goToPage((activePage + 1) % pageCount)
