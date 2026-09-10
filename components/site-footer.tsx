@@ -28,8 +28,12 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-secondary/40 py-8 sm:py-10">
       <div className="mx-auto max-w-6xl px-5 text-center sm:px-6">
-        <div className="flex flex-col items-center leading-none">
-          <span className="font-serif text-3xl tracking-[0.22em] text-foreground">CORTE FINO</span>
+        <div className="flex justify-center">
+          <img
+            src="/corte-fino-footer-logo.png"
+            alt="Corte Fino Studio — barbería"
+            className="h-auto w-56 sm:w-72"
+          />
         </div>
         <p className="mx-auto mt-3 max-w-md text-sm italic leading-relaxed text-muted-foreground">
           Tu estilo, bien hecho.
