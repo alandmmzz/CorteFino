@@ -19,7 +19,7 @@ export function Hero() {
           </p>
           <div className="show-up show-up-4 mt-8 flex flex-wrap gap-3">
             <a href="/reservar" className="hero-button-glow soft-lights inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-8 py-3 text-sm font-medium uppercase tracking-[0.16em] text-background transition-transform hover:-translate-y-0.5">
-              Reservá ya <ArrowRight aria-hidden="true" className="size-4" />
+              Asegurá tu lugar <ArrowRight aria-hidden="true" className="size-4" />
             </a>
             <a href="#barberos" className="inline-flex min-h-12 items-center justify-center rounded-full border border-foreground/30 bg-foreground/[0.04] px-7 py-3 text-sm font-medium text-foreground transition-colors hover:border-foreground hover:bg-foreground/10">
               Ver barberos
@@ -37,7 +37,7 @@ export function Hero() {
           <div aria-hidden="true" className="hero-image-fade absolute inset-0" />
           <div className="absolute inset-x-5 bottom-5 flex items-center justify-between gap-3 rounded-2xl border border-foreground/20 bg-background/80 p-3 shadow-[0_0_36px_oklch(0.9_0_0/0.1)] backdrop-blur-md sm:inset-x-8 sm:bottom-8 sm:p-4">
             <div className="flex items-center gap-3"><span className="flex size-9 items-center justify-center rounded-full bg-background text-sm text-foreground">✦</span><div><p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55">Corte Fino</p><p className="text-sm font-medium text-foreground">Tu próximo corte empieza acá</p></div></div>
-            <a href="/reservar" className="rounded-full bg-background px-4 py-2 text-xs font-semibold text-foreground">Reservá ya</a>
+            <a href="/reservar" className="soft-lights inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background px-4 py-2 text-xs font-semibold text-foreground">Asegurá tu lugar</a>
           </div>
         </div>
       </div>

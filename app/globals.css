@@ -246,6 +246,10 @@
   }
 }
 
+.soft-lights {
+  box-shadow: 0 0 24px oklch(0.62 0.2 20 / 0.16), 0 0 30px oklch(0.48 0.12 250 / 0.14);
+}
+
 .hero-image-fade {
   background: linear-gradient(to bottom, transparent 0%, transparent 62%, var(--background) 100%);
   pointer-events: none;
