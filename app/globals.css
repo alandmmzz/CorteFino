@@ -368,7 +368,7 @@
     oklch(0.48 0.12 250) 36px 54px,
     oklch(0.96 0 0) 54px 72px
   );
-  background-size: 72px 100%;
+  background-size: 144px 100%;
 }
 
 .barber-stripe:not(.membership-stripe) {
@@ -377,7 +377,7 @@
 
 @keyframes barber-stripe-slide {
   from { background-position: 0 0; }
-  to { background-position: -72px 0; }
+  to { background-position: -144px 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
