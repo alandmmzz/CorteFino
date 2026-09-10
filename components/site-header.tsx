@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false)
@@ -26,7 +27,7 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-2.5 sm:px-6 sm:py-3">
         <Link href="/" className="block shrink-0" aria-label="Corte Fino, inicio">
-          <span className="font-serif text-[1.65rem] font-medium tracking-[0.16em] text-foreground sm:text-3xl sm:tracking-[0.22em]">CORTE FINO</span>
+          <Image src="/corte-fino-logo.png" alt="Corte Fino Studio" width={220} height={58} priority className="h-auto w-[8.75rem] sm:w-[11rem]" />
         </Link>
         <nav className="hidden items-center gap-8 text-sm tracking-wide text-foreground md:flex">
           <Link href="/#nosotras" className="transition-colors hover:text-primary">

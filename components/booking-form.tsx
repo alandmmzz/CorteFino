@@ -4,7 +4,7 @@ import { createAppointment, getAvailableSchedule, getBookedTimes } from "@/app/a
 import { DayPicker } from "@/components/day-picker"
 import { DEPOSIT_ENABLED, SERVICE_CATEGORIES, formatUYU } from "@/lib/services"
 import { getScheduleForCategory } from "@/lib/schedule"
-import { Check, ChevronDown, Scissors, Info } from "lucide-react"
+import { Check, Scissors, Info } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
 
@@ -25,7 +25,7 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory] = useState<string | null>(() => catalog?.[0]?.name ?? SERVICE_CATEGORIES[0]?.name ?? null)
   const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null)
   const [selectedTreatments, setSelectedTreatments] = useState<string[]>([])
   const [bookedTimes, setBookedTimes] = useState<string[]>([])
@@ -51,18 +51,13 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
   const category = bookingCategories.find((item) => item.name === selectedCategory)
   const servicePrice = category?.treatments.filter((item) => selectedTreatments.includes(String(item.id))).reduce((sum, item) => sum + (("promoPrice" in item ? item.promoPrice : null) ?? item.price ?? 0), 0) ?? 0
 
-  function chooseCategory(name: string) {
-    setSelectedCategory(name)
-    setSelectedTreatments([])
-  }
-
   function toggleTreatment(id: string) {
     setSelectedTreatments([id])
   }
 
   function handleSubmit(formData: FormData) {
     if (!selectedDate || !selectedTime || !selectedCategory || selectedTreatments.length === 0) {
-      setMessage({ ok: false, text: "Elegí una categoría y al menos un tratamiento, además del día y horario." })
+      setMessage({ ok: false, text: "Elegí una opción, además del día y horario." })
       return
     }
     formData.set("service", JSON.stringify({ category: selectedCategory, treatmentIds: selectedTreatments }))
@@ -117,19 +112,19 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
         </div>
       </fieldset>
       <fieldset>
-        <legend className="mb-3 text-sm text-foreground">Elegí una categoría</legend>
+        <legend className="mb-3 text-sm text-foreground">Elegí una opción</legend>
         <div className="grid gap-3">
           {bookingCategories.map((item) => {
             const Icon = icons[item.name as keyof typeof icons]
-            const active = selectedCategory === item.name
+            const active = true
             return (
               <div key={item.name}>
-                <button type="button" role="radio" aria-checked={active} onClick={() => chooseCategory(item.name)} className={`flex w-full items-center gap-3 border p-4 text-left transition-all ${item.name === "Promos" ? "rounded-2xl border-primary/45 bg-accent/35 shadow-[0_4px_16px_-8px_var(--color-primary)] hover:-translate-y-0.5 hover:border-primary/70" : `rounded-lg ${active ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/50"}`}`}>
+                <button type="button" role="radio" aria-checked={active} onClick={() => chooseCategory(item.name)} className="hidden">
                   <Icon className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
                   <span className="flex-1"><span className={`block font-serif text-lg text-foreground ${item.name === "Promos" ? "tracking-wide" : ""}`}>{item.name}</span><span className="block text-xs text-muted-foreground">{item.description}</span></span>
                   <span className={`flex h-5 w-5 items-center justify-center rounded-full border ${active ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{active && <Check className="h-3 w-3" aria-hidden="true" />}</span>
                 </button>
-                <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}><div className="min-h-0 overflow-hidden"><div className="mt-1 rounded-lg border border-primary/25 bg-background/70 p-2" role="group" aria-label={`Tratamientos de ${item.name}`}><div className="mb-1 flex items-center gap-2 text-xs uppercase tracking-wider text-primary"><ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ${active ? "rotate-0" : "-rotate-90"}`} /> Elegí un tratamiento</div><div className="flex flex-col gap-1">{item.treatments.map((treatment) => { const checked = selectedTreatments.includes(treatment.id); const treatmentNote = ("note" in treatment ? treatment.note?.trim() : "") ?? ""; return <label key={treatment.id} className={`grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-start gap-x-2 gap-y-0 rounded-md px-2 py-1.5 transition-colors hover:bg-foreground/[0.06] ${checked ? "bg-primary/[0.08]" : ""}`}><input type="radio" name="treatment" checked={checked} onChange={() => toggleTreatment(treatment.id)} className="sr-only" /><span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${checked ? "border-primary bg-primary" : "border-foreground/45 bg-background"}`}>{checked && <span className="h-2 w-2 rounded-full bg-primary-foreground" aria-hidden="true" />}</span><span className="group relative min-w-0 flex-1 text-sm text-foreground"><span className="inline"><span>{treatment.name}</span>{treatmentNote && <Info className="ml-1 inline-block size-2.5 -translate-y-0.5 text-primary/75" strokeWidth={2.25} aria-hidden="true" />}</span>{checked && treatmentNote && <span className="col-span-3 mt-0.5 block w-full origin-top animate-in fade-in slide-in-from-top-1 duration-300 text-xs leading-relaxed text-muted-foreground">{treatmentNote}</span>}</span><span className="text-sm tabular-nums text-primary">{treatment.price === null ? "Consultar" : ("promoPrice" in treatment && treatment.promoPrice != null) ? <><span className="mr-1 text-muted-foreground line-through">{formatUYU(treatment.price)}</span>{formatUYU(Number(treatment.promoPrice))}</> : formatUYU(treatment.price)}</span></label> })}</div></div></div></div>
+                <div className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}><div className="min-h-0 overflow-hidden"><div className="mt-1 rounded-lg border border-primary/25 bg-background/70 p-2" role="group" aria-label={`Tratamientos de ${item.name}`}><div className="flex flex-col gap-1">{item.treatments.map((treatment) => { const checked = selectedTreatments.includes(treatment.id); const treatmentNote = ("note" in treatment ? treatment.note?.trim() : "") ?? ""; return <label key={treatment.id} className={`grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-start gap-x-2 gap-y-0 rounded-md px-2 py-1.5 transition-colors hover:bg-foreground/[0.06] ${checked ? "bg-primary/[0.08]" : ""}`}><input type="radio" name="treatment" checked={checked} onChange={() => toggleTreatment(treatment.id)} className="sr-only" /><span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${checked ? "border-primary bg-primary" : "border-foreground/45 bg-background"}`}>{checked && <span className="h-2 w-2 rounded-full bg-primary-foreground" aria-hidden="true" />}</span><span className="group relative min-w-0 flex-1 text-sm text-foreground"><span className="inline"><span>{treatment.name}</span>{treatmentNote && <Info className="ml-1 inline-block size-2.5 -translate-y-0.5 text-primary/75" strokeWidth={2.25} aria-hidden="true" />}</span>{checked && treatmentNote && <span className="col-span-3 mt-0.5 block w-full origin-top animate-in fade-in slide-in-from-top-1 duration-300 text-xs leading-relaxed text-muted-foreground">{treatmentNote}</span>}</span><span className="text-sm tabular-nums text-primary">{treatment.price === null ? "Consultar" : ("promoPrice" in treatment && treatment.promoPrice != null) ? <><span className="mr-1 text-muted-foreground line-through">{formatUYU(treatment.price)}</span>{formatUYU(Number(treatment.promoPrice))}</> : formatUYU(treatment.price)}</span></label> })}</div></div></div></div>
               </div>
             )
           })}
