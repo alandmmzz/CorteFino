@@ -75,7 +75,7 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
             <p className="mb-3 text-xs uppercase tracking-[0.35em] text-primary">Lo que hacemos</p>
             <h2 className="font-serif text-4xl leading-none text-foreground sm:text-5xl">Nuestros servicios</h2>
           </div>
-          <Link href="/reservar" className="w-fit rounded-full border border-primary px-5 py-2.5 text-xs font-medium tracking-[0.12em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground">VER TODOS</Link>
+          <Link href="/reservar" className="w-fit rounded-full border border-primary px-6 py-3 text-xs font-medium uppercase tracking-[0.16em] text-primary transition-colors hover:bg-primary hover:text-primary-foreground">VER TODOS</Link>
         </div>
         <div className="mb-5 flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-foreground/55"><Scissors aria-hidden="true" className="size-4 text-primary" /><span className="h-px w-10 bg-primary" /><span>Barbería</span></div>
         <div className="relative">
