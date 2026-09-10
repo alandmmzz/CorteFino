@@ -368,7 +368,7 @@
     oklch(0.48 0.12 250) 36px 54px,
     oklch(0.96 0 0) 54px 72px
   );
-  background-size: 144px 100%;
+  background-size: 72px 100%;
 }
 
 .barber-stripe:not(.membership-stripe) {
