@@ -341,6 +341,15 @@
   filter: drop-shadow(0 2px 1px oklch(0.38 0.08 70 / 0.28)) drop-shadow(0 8px 14px oklch(0.58 0.13 76 / 0.18));
 }
 
+.membership-stripe {
+  background: repeating-linear-gradient(
+    135deg,
+    oklch(0.55 0.13 72) 0 18px,
+    oklch(0.96 0.12 92) 18px 36px,
+    oklch(0.68 0.15 78) 36px 54px
+  );
+}
+
 .barber-stripe {
   background: repeating-linear-gradient(
     135deg,
