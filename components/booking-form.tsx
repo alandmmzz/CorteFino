@@ -25,7 +25,7 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
   const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory] = useState<string | null>(() => catalog?.[0]?.name ?? SERVICE_CATEGORIES[0]?.name ?? null)
   const [selectedStaffId, setSelectedStaffId] = useState<number | null>(null)
   const [selectedTreatments, setSelectedTreatments] = useState<string[]>([])
   const [bookedTimes, setBookedTimes] = useState<string[]>([])
@@ -51,18 +51,13 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
   const category = bookingCategories.find((item) => item.name === selectedCategory)
   const servicePrice = category?.treatments.filter((item) => selectedTreatments.includes(String(item.id))).reduce((sum, item) => sum + (("promoPrice" in item ? item.promoPrice : null) ?? item.price ?? 0), 0) ?? 0
 
-  function chooseCategory(name: string) {
-    setSelectedCategory(name)
-    setSelectedTreatments([])
-  }
-
   function toggleTreatment(id: string) {
     setSelectedTreatments([id])
   }
 
   function handleSubmit(formData: FormData) {
     if (!selectedDate || !selectedTime || !selectedCategory || selectedTreatments.length === 0) {
-      setMessage({ ok: false, text: "Elegí una categoría y al menos un tratamiento, además del día y horario." })
+      setMessage({ ok: false, text: "Elegí una opción, además del día y horario." })
       return
     }
     formData.set("service", JSON.stringify({ category: selectedCategory, treatmentIds: selectedTreatments }))
@@ -117,14 +112,14 @@ export function BookingForm({ catalog, staff }: { catalog?: BookingCatalog; staf
         </div>
       </fieldset>
       <fieldset>
-        <legend className="mb-3 text-sm text-foreground">Elegí una categoría</legend>
+        <legend className="mb-3 text-sm text-foreground">Elegí una opción</legend>
         <div className="grid gap-3">
           {bookingCategories.map((item) => {
             const Icon = icons[item.name as keyof typeof icons]
-            const active = selectedCategory === item.name
+            const active = true
             return (
               <div key={item.name}>
-                <button type="button" role="radio" aria-checked={active} onClick={() => chooseCategory(item.name)} className={`flex w-full items-center gap-3 border p-4 text-left transition-all ${item.name === "Promos" ? "rounded-2xl border-primary/45 bg-accent/35 shadow-[0_4px_16px_-8px_var(--color-primary)] hover:-translate-y-0.5 hover:border-primary/70" : `rounded-lg ${active ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/50"}`}`}>
+                <button type="button" role="radio" aria-checked={active} onClick={() => chooseCategory(item.name)} className="hidden">
                   <Icon className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
                   <span className="flex-1"><span className={`block font-serif text-lg text-foreground ${item.name === "Promos" ? "tracking-wide" : ""}`}>{item.name}</span><span className="block text-xs text-muted-foreground">{item.description}</span></span>
                   <span className={`flex h-5 w-5 items-center justify-center rounded-full border ${active ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{active && <Check className="h-3 w-3" aria-hidden="true" />}</span>
