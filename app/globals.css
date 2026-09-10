@@ -358,6 +358,9 @@
     oklch(0.96 0.12 92) 18px 36px,
     oklch(0.68 0.15 78) 36px 54px
   );
+  background-size: 76.368px 100%;
+  background-position: 0 0;
+  animation: membership-stripe-slide 2.6s linear infinite;
 }
 
 .barber-stripe {
@@ -374,6 +377,15 @@
 
 .barber-stripe:not(.membership-stripe) {
   animation: barber-stripe-slide 2.6s linear infinite;
+}
+
+@keyframes membership-stripe-slide {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -76.368px 0;
+  }
 }
 
 @keyframes barber-stripe-slide {
