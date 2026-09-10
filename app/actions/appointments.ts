@@ -530,7 +530,7 @@ export async function getBookedTimes(appointmentDate: string, category?: string,
   })
   if (!category) return []
   const categoryDuration = catalog.find((item) => item.name === category)?.durationMinutes ?? 90
-  return getScheduleForCategory(category).filter((time) => isTimeAvailable(category, time, booked, categoryDuration))
+  return (await getAvailableSchedule(category, appointmentDate)).filter((time) => isTimeAvailable(category, time, booked, categoryDuration))
 }
 
 export async function updateStatus(id: number, status: string) {
