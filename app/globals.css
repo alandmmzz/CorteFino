@@ -369,19 +369,5 @@
     oklch(0.96 0 0) 54px 72px
   );
   background-size: 72px 100%;
-}
-
-.barber-stripe:not(.membership-stripe) {
-  animation: barber-stripe-slide 2.6s linear infinite;
-}
-
-@keyframes barber-stripe-slide {
-  from { background-position: 0 0; }
-  to { background-position: -72px 0; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .barber-stripe {
-    animation: none;
-  }
+  background-position: 0 0;
 }
