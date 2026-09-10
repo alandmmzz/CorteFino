@@ -361,11 +361,25 @@
 }
 
 .barber-stripe {
-  background: repeating-linear-gradient(
+  background-color: oklch(0.96 0 0);
+  background-image: repeating-linear-gradient(
     135deg,
     oklch(0.62 0.2 25) 0 18px,
-    oklch(0.96 0 0) 18px 36px,
+    transparent 18px 36px,
     oklch(0.48 0.12 250) 36px 54px,
-    oklch(0.96 0 0) 54px 72px
+    transparent 54px 72px
   );
+  background-size: 144px 100%;
+  animation: barber-stripe-slide 2.6s linear infinite;
+}
+
+@keyframes barber-stripe-slide {
+  from { background-position: 0 0; }
+  to { background-position: -144px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barber-stripe {
+    animation: none;
+  }
 }
