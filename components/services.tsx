@@ -55,14 +55,47 @@ export function Services({ catalog = services }: { catalog?: PublicService[] } =
     return () => window.clearInterval(timer)
   }, [pageCount])
 
-  const goToPage = (page: number) => {
-    const nextPageIndex = Math.max(0, Math.min(page, pageCount - 1))
+  useEffect(() => {
     const carousel = carouselRef.current
     if (!carousel) return
-    const firstCard = carousel.children[nextPageIndex * cardsPerPage] as HTMLElement | undefined
+    let frame = 0
+    const syncActivePageWithScroll = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const children = Array.from(carousel.children) as HTMLElement[]
+        if (children.length === 0) return
+        let closestIndex = 0
+        let closestDistance = Infinity
+        children.forEach((child, index) => {
+          const distance = Math.abs(child.offsetLeft - carousel.scrollLeft)
+          if (distance < closestDistance) {
+            closestDistance = distance
+            closestIndex = index
+          }
+        })
+        const page = Math.min(pageCount - 1, Math.round(closestIndex / cardsPerPage))
+        setActivePage(page)
+      })
+    }
+    carousel.addEventListener("scroll", syncActivePageWithScroll, { passive: true })
+    return () => {
+      carousel.removeEventListener("scroll", syncActivePageWithScroll)
+      cancelAnimationFrame(frame)
+    }
+  }, [cardsPerPage, pageCount])
+
+  useEffect(() => {
+    const carousel = carouselRef.current
+    if (!carousel) return
+    const firstCard = carousel.children[activePage * cardsPerPage] as HTMLElement | undefined
     if (!firstCard) return
-    setActivePage(nextPageIndex)
+    if (Math.abs(carousel.scrollLeft - firstCard.offsetLeft) < 2) return
     carousel.scrollTo({ left: firstCard.offsetLeft, behavior: "smooth" })
+  }, [activePage, cardsPerPage])
+
+  const goToPage = (page: number) => {
+    const nextPageIndex = Math.max(0, Math.min(page, pageCount - 1))
+    setActivePage(nextPageIndex)
   }
   const previousPage = () => goToPage(activePage === 0 ? pageCount - 1 : activePage - 1)
   const nextPage = () => goToPage((activePage + 1) % pageCount)
