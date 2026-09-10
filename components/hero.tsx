@@ -34,6 +34,7 @@ export function Hero() {
         <div className="relative min-h-[28rem] overflow-hidden border-l border-background/10 lg:min-h-[100svh]">
           <Image src="/barber-shop-hero.png" alt="Interior de la barbería Corte Fino en Santa Catalina" fill priority className="object-cover" />
           <div className="absolute inset-0 bg-background/20" />
+          <div aria-hidden="true" className="hero-image-fade absolute inset-0" />
           <div className="absolute inset-x-5 bottom-5 flex items-center justify-between gap-3 rounded-2xl border border-foreground/20 bg-background/80 p-3 shadow-[0_0_36px_oklch(0.9_0_0/0.1)] backdrop-blur-md sm:inset-x-8 sm:bottom-8 sm:p-4">
             <div className="flex items-center gap-3"><span className="flex size-9 items-center justify-center rounded-full bg-background text-sm text-foreground">✦</span><div><p className="text-[10px] uppercase tracking-[0.2em] text-foreground/55">Corte Fino</p><p className="text-sm font-medium text-foreground">Tu próximo corte empieza acá</p></div></div>
             <a href="/reservar" className="rounded-full bg-background px-4 py-2 text-xs font-semibold text-foreground">Reservá ya</a>
