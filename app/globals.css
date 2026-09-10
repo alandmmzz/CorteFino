@@ -246,6 +246,28 @@
   }
 }
 
+.hero-image-fade {
+  background: linear-gradient(to bottom, transparent 0%, transparent 62%, var(--background) 100%);
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .hero-image-fade {
+    background: linear-gradient(to right, var(--background) 0%, color-mix(in oklab, var(--background) 78%, transparent) 12%, transparent 48%), linear-gradient(to bottom, transparent 0%, transparent 72%, var(--background) 100%);
+  }
+
+  main > .hero-glow,
+  main > .snap-section {
+    min-height: 100svh;
+  }
+
+  main > .snap-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 767px) {
   .show-up {
     animation: show-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -317,6 +339,15 @@
   background-clip: text;
   color: transparent;
   filter: drop-shadow(0 2px 1px oklch(0.38 0.08 70 / 0.28)) drop-shadow(0 8px 14px oklch(0.58 0.13 76 / 0.18));
+}
+
+.barber-stripe.membership-stripe {
+  background: repeating-linear-gradient(
+    135deg,
+    oklch(0.55 0.13 72) 0 18px,
+    oklch(0.96 0.12 92) 18px 36px,
+    oklch(0.68 0.15 78) 36px 54px
+  );
 }
 
 .barber-stripe {
