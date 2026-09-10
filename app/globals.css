@@ -247,16 +247,9 @@
 }
 
 @media (min-width: 768px) {
-  html {
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-  }
-
   main > .hero-glow,
   main > .snap-section {
     min-height: 100svh;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
   }
 
   main > .snap-section {
