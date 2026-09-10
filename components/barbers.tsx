@@ -19,7 +19,7 @@ export function Barbers({ staff }: { staff: Staff[] }) {
               </div>
               <div className="flex flex-col justify-between gap-8 p-7">
                 <div><p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Barbero</p><h3 className="mt-3 font-serif text-3xl text-foreground">{barber.name}</h3>{barber.instagram && <a className="mt-3 inline-block text-sm text-accent-foreground underline underline-offset-4" href={`https://instagram.com/${barber.instagram.replace(/^@/, "")}`} target="_blank" rel="noreferrer">@{barber.instagram.replace(/^@/, "")}</a>}</div>
-                <Link href="/reservar" className="inline-flex w-fit items-center border-b-2 border-destructive pb-2 text-sm font-medium text-foreground transition-colors hover:text-destructive">Reservar con {barber.name.split(" ")[0]}</Link>
+                <Link href="/reservar" className="inline-flex w-fit items-center border-b-2 border-destructive pb-2 text-sm font-semibold text-foreground transition-colors hover:text-destructive">Reservar con {barber.name.split(" ")[0]}</Link>
               </div>
             </article>
           ))}

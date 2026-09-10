@@ -7,7 +7,7 @@ export function Hero() {
       <div className="mx-auto grid min-h-[calc(100svh-4rem)] max-w-[1600px] lg:min-h-[100svh] lg:grid-cols-[0.95fr_1.05fr]">
         <div className="flex flex-col justify-center px-6 pb-12 pt-24 sm:px-10 lg:px-12 lg:pb-8 lg:pt-20 xl:px-16">
           <div className="show-up show-up-1 mb-5 flex flex-wrap gap-3">
-            <p className="location-badge inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 bg-foreground/[0.06] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-foreground/80">
+            <p className="location-badge soft-lights inline-flex w-fit items-center gap-2 rounded-full border border-foreground/25 bg-foreground/[0.06] px-4 py-2 text-[10px] uppercase tracking-[0.24em] text-foreground/80 shadow-[0_0_24px_oklch(0.7_0.12_25/0.1)]">
               <MapPin aria-hidden="true" className="size-3.5" /> Santa Catalina · Montevideo
             </p>
           </div>
@@ -18,7 +18,7 @@ export function Hero() {
             Elegí tu servicio, tu barbero y tu horario. Una experiencia cuidada para que salgas sintiéndote tan bien como te ves.
           </p>
           <div className="show-up show-up-4 mt-8 flex flex-wrap gap-3">
-            <a href="/reservar" className="hero-button-glow inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-7 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5">
+            <a href="/reservar" className="hero-button-glow soft-lights inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-foreground px-8 py-3 text-sm font-medium uppercase tracking-[0.16em] text-background transition-transform hover:-translate-y-0.5">
               Reservá ya <ArrowRight aria-hidden="true" className="size-4" />
             </a>
             <a href="#barberos" className="inline-flex min-h-12 items-center justify-center rounded-full border border-foreground/30 bg-foreground/[0.04] px-7 py-3 text-sm font-medium text-foreground transition-colors hover:border-foreground hover:bg-foreground/10">

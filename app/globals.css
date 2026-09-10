@@ -252,7 +252,11 @@
 }
 
 @media (min-width: 768px) {
-  .hero-image-fade {
+.soft-lights {
+  box-shadow: 0 0 24px oklch(0.62 0.2 20 / 0.16), 0 0 30px oklch(0.48 0.12 250 / 0.14);
+}
+
+.hero-image-fade {
     background: linear-gradient(to right, var(--background) 0%, color-mix(in oklab, var(--background) 78%, transparent) 12%, transparent 48%), linear-gradient(to bottom, transparent 0%, transparent 72%, var(--background) 100%);
   }
 
@@ -357,11 +361,32 @@
 }
 
 .barber-stripe {
-  background: repeating-linear-gradient(
+  background-image: repeating-linear-gradient(
     135deg,
     oklch(0.62 0.2 25) 0 18px,
     oklch(0.96 0 0) 18px 36px,
     oklch(0.48 0.12 250) 36px 54px,
     oklch(0.96 0 0) 54px 72px
   );
+  background-size: 101.823px 100%;
+  background-position: 0 0;
+}
+
+.barber-stripe:not(.membership-stripe) {
+  animation: barber-stripe-slide 2.6s linear infinite;
+}
+
+@keyframes barber-stripe-slide {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -101.823px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barber-stripe {
+    animation: none;
+  }
 }
